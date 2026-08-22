@@ -29,13 +29,9 @@ export const FaqSection: React.FC = () => {
   ];
 
   return (
-    <motion.section
+    <section
       id="faq-net-metering-section"
-      className="space-y-6 text-white max-w-4xl mx-auto w-full"
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
+      className="space-y-6 text-white max-w-4xl mx-auto w-full opacity-100"
     >
       <div className="text-center space-y-2">
         <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">Everything You Need to Know</span>
@@ -51,12 +47,8 @@ export const FaqSection: React.FC = () => {
         {faqs.map((faq, idx) => {
           const isOpen = openIndex === idx;
           return (
-            <motion.div
+            <div
               key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.4, delay: idx * 0.1, ease: 'easeOut' }}
               className="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-lg transition-all"
             >
               <button
@@ -71,26 +63,17 @@ export const FaqSection: React.FC = () => {
                 {isOpen ? <ChevronUp className="w-5 h-5 text-amber-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
               </button>
 
-              <AnimatePresence>
-                {isOpen && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: 'easeInOut' }}
-                    className="overflow-hidden"
-                  >
-                    <div className="px-5 pb-5 text-xs text-slate-300 leading-relaxed border-t border-slate-800/60 pt-3">
-                      {faq.a}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
+              {isOpen && (
+                <div className="px-5 pb-5 text-xs text-slate-300 leading-relaxed border-t border-slate-800/60 pt-3">
+                  {faq.a}
+                </div>
+              )}
+            </div>
           );
         })}
       </div>
-    </motion.section>
+    </section>
   );
+
 };
 

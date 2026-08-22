@@ -55,13 +55,9 @@ export const CompletedProjectsPortfolio: React.FC = () => {
   const filtered = selectedCity === 'all' ? projects : projects.filter((p) => p.city.toLowerCase() === selectedCity.toLowerCase());
 
   return (
-    <motion.section
+    <section
       id="completed-projects-portfolio"
-      className="space-y-6 text-white"
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
+      className="space-y-6 text-white opacity-100"
     >
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -90,14 +86,9 @@ export const CompletedProjectsPortfolio: React.FC = () => {
       </div>
 
       <div className="flex sm:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 overflow-x-auto snap-x scrollbar-none pb-3 sm:pb-0">
-        {filtered.map((proj, idx) => (
-          <motion.div
+        {filtered.map((proj) => (
+          <div
             key={proj.id}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.4, delay: idx * 0.1, ease: 'easeOut' }}
-            whileHover={{ y: -6, transition: { duration: 0.2 } }}
             className="group rounded-3xl overflow-hidden bg-slate-900/90 border border-slate-800 hover:border-emerald-500/50 shadow-xl transition-all duration-300 w-[84vw] sm:w-auto shrink-0 snap-center"
           >
             <div className="relative h-48 overflow-hidden">
@@ -134,11 +125,12 @@ export const CompletedProjectsPortfolio: React.FC = () => {
                 <span className="text-amber-400 font-bold">{proj.savings}</span>
               </div>
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
 
-    </motion.section>
+    </section>
   );
+
 };
 

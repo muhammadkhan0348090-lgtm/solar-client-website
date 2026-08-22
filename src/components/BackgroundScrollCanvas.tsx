@@ -282,15 +282,16 @@ export const HeroScrollCanvas: React.FC<HeroCanvasProps> = ({ containerRef }) =>
   }, [isFrameMode]);
 
   return (
-    <div className="sticky top-0 w-full h-screen overflow-hidden flex items-center justify-center bg-slate-950 text-white">
+    <div className="relative w-full min-h-[70vh] py-12 sm:py-20 flex items-center justify-center bg-slate-950/80 text-white overflow-hidden z-10">
       {/* Dynamic Animated CSS Gradient & Solar Grid Particles Canvas */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black z-0" />
+      <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black z-0 pointer-events-none" />
 
       {/* Background Canvas */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full object-cover z-0 block opacity-90 transition-opacity duration-500"
+        className="fixed inset-0 w-full h-full object-cover z-0 pointer-events-none opacity-90 transition-opacity duration-500"
       />
+
 
       {/* Dark Overlay Gradient for High Contrast */}
       <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/60 z-10 pointer-events-none" />

@@ -31,13 +31,9 @@ export const TestimonialsSection: React.FC = () => {
   ];
 
   return (
-    <motion.section
+    <section
       id="client-testimonials-section"
-      className="space-y-6 text-white"
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
+      className="space-y-6 text-white opacity-100"
     >
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -59,14 +55,9 @@ export const TestimonialsSection: React.FC = () => {
       </div>
 
       <div className="flex md:grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 overflow-x-auto snap-x scrollbar-none pb-3 md:pb-0">
-        {reviews.map((rev, idx) => (
-          <motion.div
+        {reviews.map((rev) => (
+          <div
             key={rev.id}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.5, delay: idx * 0.15, ease: 'easeOut' }}
-            whileHover={{ y: -5, transition: { duration: 0.2 } }}
             className="bg-slate-900/90 border border-slate-800 p-6 rounded-3xl space-y-4 shadow-xl relative overflow-hidden w-[84vw] md:w-auto shrink-0 snap-center"
           >
             <Quote className="w-8 h-8 text-emerald-500/20 absolute top-4 right-4" />
@@ -92,11 +83,12 @@ export const TestimonialsSection: React.FC = () => {
                 {rev.systemSize}
               </span>
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
 
-    </motion.section>
+    </section>
   );
+
 };
 

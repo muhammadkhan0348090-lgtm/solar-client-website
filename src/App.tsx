@@ -267,10 +267,11 @@ export default function App() {
         <section
           ref={heroContainerRef}
           id="top-hero-animation-container"
-          className="relative h-[150vh] w-full"
+          className="relative z-10 w-full min-h-auto"
         >
           <HeroScrollCanvas containerRef={heroContainerRef} />
         </section>
+
 
         {/* 2. LIVE PAKISTAN SOLAR MARKET RATES TICKER BAR */}
         <section

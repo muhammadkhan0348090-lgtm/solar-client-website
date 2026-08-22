@@ -87,13 +87,9 @@ export const SolarPackagesSection: React.FC<SolarPackagesSectionProps> = ({
   ];
 
   return (
-    <motion.section
+    <section
       id="solar-packages-section"
-      className="space-y-6 text-white"
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
+      className="space-y-6 text-white opacity-100"
     >
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -109,14 +105,9 @@ export const SolarPackagesSection: React.FC<SolarPackagesSectionProps> = ({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {packages.map((pkg, idx) => (
-          <motion.div
+        {packages.map((pkg) => (
+          <div
             key={pkg.id}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.5, delay: idx * 0.15, ease: 'easeOut' }}
-            whileHover={{ scale: pkg.popular ? 1.03 : 1.02, transition: { duration: 0.2 } }}
             className={`relative rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 ${
               pkg.popular
                 ? 'bg-slate-900 border-2 border-emerald-400 shadow-2xl shadow-emerald-500/10'
@@ -183,10 +174,11 @@ export const SolarPackagesSection: React.FC<SolarPackagesSectionProps> = ({
               </button>
             </div>
 
-          </motion.div>
+          </div>
         ))}
       </div>
-    </motion.section>
+    </section>
   );
+
 };
 
