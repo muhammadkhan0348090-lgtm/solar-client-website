@@ -267,7 +267,7 @@ export default function App() {
         <section
           ref={heroContainerRef}
           id="top-hero-animation-container"
-          className="relative h-[280vh] w-full"
+          className="relative h-[150vh] w-full"
         >
           <HeroScrollCanvas containerRef={heroContainerRef} />
         </section>
@@ -275,7 +275,7 @@ export default function App() {
         {/* 2. LIVE PAKISTAN SOLAR MARKET RATES TICKER BAR */}
         <section
           id="pakistan-market-ticker-banner"
-          className="bg-emerald-950/90 backdrop-blur-2xl text-emerald-100 px-4 sm:px-6 py-3 flex items-center justify-between text-xs overflow-x-auto border-y border-emerald-800/60 sticky top-16 z-30 shadow-2xl"
+          className="bg-emerald-950/95 backdrop-blur-2xl text-emerald-100 px-4 sm:px-6 py-3 flex items-center justify-between text-xs overflow-x-auto border-y border-emerald-800/60 sticky top-16 z-30 shadow-2xl"
         >
           <div className="flex items-center gap-3 shrink-0">
             <span className="bg-emerald-600 text-slate-950 font-black px-3 py-0.5 rounded-full text-[10px] tracking-wide flex items-center gap-1.5 shadow-md">
@@ -308,7 +308,7 @@ export default function App() {
         </section>
 
         {/* 3. TURN-KEY SOLAR PACKAGES SECTION */}
-        <section id="turnkey-packages-container" className="p-4 sm:p-8 max-w-7xl mx-auto w-full pt-10">
+        <section id="turnkey-packages-container" className="relative z-20 bg-slate-950/95 p-4 sm:p-8 max-w-7xl mx-auto w-full pt-10">
           <SolarPackagesSection
             onOpenQuotationModal={() => setShowQuotationModal(true)}
             onOpenCheckoutModal={(pkg) => setSelectedPackageForCheckout(pkg)}
@@ -316,7 +316,7 @@ export default function App() {
         </section>
 
         {/* 4. FEATURED SOLAR SPEC SHOWCASE SECTION */}
-        <section id="spec-showcase-section" className="p-4 sm:p-8 max-w-7xl mx-auto w-full space-y-6 pt-10">
+        <section id="spec-showcase-section" className="relative z-20 bg-slate-950/95 p-4 sm:p-8 max-w-7xl mx-auto w-full space-y-6 pt-10">
           <div className="flex items-center justify-between">
             <div>
               <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">Featured Spec</span>
@@ -328,7 +328,7 @@ export default function App() {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setShowQuotationModal(true)}
-                className="text-xs font-black text-slate-950 bg-amber-400 hover:bg-amber-300 px-4 py-2 rounded-full shadow-lg flex items-center gap-1.5 transition-transform active:scale-95"
+                className="text-xs font-black text-slate-950 bg-amber-400 hover:bg-amber-300 px-4 py-2 rounded-full shadow-lg flex items-center gap-1.5 transition-transform active:scale-95 cursor-pointer"
               >
                 <FileText className="w-3.5 h-3.5" />
                 <span>Request Quotation</span>
@@ -378,7 +378,7 @@ export default function App() {
         </section>
 
         {/* 5. INTERACTIVE PAKISTAN SOLAR ROI CALCULATOR SECTION */}
-        <section id="roi-calculator-section" className="p-4 sm:p-8 max-w-7xl mx-auto w-full space-y-6 pt-12">
+        <section id="roi-calculator-section" className="relative z-20 bg-slate-950/95 p-4 sm:p-8 max-w-7xl mx-auto w-full space-y-6 pt-12">
           <div className="flex items-center justify-between">
             <div>
               <span className="text-xs font-bold text-amber-400 uppercase tracking-widest">ROI Estimator</span>
@@ -389,7 +389,7 @@ export default function App() {
 
             <button
               onClick={() => setShowQuotationModal(true)}
-              className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-lg"
+              className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-lg cursor-pointer"
             >
               <Send className="w-3.5 h-3.5" />
               <span>Get System Quote</span>
@@ -402,17 +402,17 @@ export default function App() {
         </section>
 
         {/* 6. COMPLETED PROJECTS PORTFOLIO GALLERY */}
-        <section id="completed-projects-container" className="p-4 sm:p-8 max-w-7xl mx-auto w-full pt-12">
+        <section id="completed-projects-container" className="relative z-20 bg-slate-950/95 p-4 sm:p-8 max-w-7xl mx-auto w-full pt-12">
           <CompletedProjectsPortfolio />
         </section>
 
         {/* 7. CLIENT TESTIMONIALS & GOOGLE RATINGS */}
-        <section id="client-testimonials-container" className="p-4 sm:p-8 max-w-7xl mx-auto w-full pt-12">
+        <section id="client-testimonials-container" className="relative z-20 bg-slate-950/95 p-4 sm:p-8 max-w-7xl mx-auto w-full pt-12">
           <TestimonialsSection />
         </section>
 
         {/* 8. RENEWABLE ENERGY PROJECTS GALLERY */}
-        <section id="projects-gallery-section" className="p-4 sm:p-8 max-w-7xl mx-auto w-full space-y-6 pt-12">
+        <section id="projects-gallery-section" className="relative z-20 bg-slate-950/95 p-4 sm:p-8 max-w-7xl mx-auto w-full space-y-6 pt-12">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">Projects Feed</span>
@@ -443,7 +443,7 @@ export default function App() {
                     );
                     if (matchedPin) setActivePin(matchedPin);
                   }}
-                  className={`shrink-0 px-4 py-2 rounded-full text-xs font-bold transition-all ${
+                  className={`shrink-0 px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer ${
                     selectedBrandFilter === item.id
                       ? 'bg-emerald-500 text-slate-950 shadow-md'
                       : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
@@ -473,9 +473,10 @@ export default function App() {
         </section>
 
         {/* 9. FAQ ACCORDION & NET METERING GUIDE */}
-        <section id="faq-section-container" className="p-4 sm:p-8 max-w-7xl mx-auto w-full pt-12">
+        <section id="faq-section-container" className="relative z-20 bg-slate-950/95 p-4 sm:p-8 max-w-7xl mx-auto w-full pt-12">
           <FaqSection />
         </section>
+
 
         {/* Company Footer with Direct Contact Info */}
         <footer className="mt-20 pt-10 border-t border-slate-800 text-center text-xs text-slate-400 space-y-4 pb-16">

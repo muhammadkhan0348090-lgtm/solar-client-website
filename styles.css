@@ -18,10 +18,10 @@ body::-webkit-scrollbar {
   display: none; /* Chrome/Safari/Opera */
 }
 
-/* Page height dictates scroll length - 800vh allows smooth frame transitions */
 body {
-  min-height: 800vh;
+  min-height: 100vh;
 }
+
 
 /* Canvas overlay */
 #scroll-canvas {
