@@ -79,16 +79,18 @@ export const QuotationModal: React.FC<QuotationModalProps> = ({ isOpen, onClose 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg bg-slate-900 border border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden text-white">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="relative w-[95vw] sm:w-[90vw] md:w-full max-w-lg bg-slate-900 border border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden text-white max-h-[90vh] flex flex-col">
         {/* Modal Header */}
-        <div className="bg-gradient-to-r from-emerald-950 to-slate-900 p-6 border-b border-slate-800 relative">
+        <div className="bg-gradient-to-r from-emerald-950 to-slate-900 p-4 sm:p-6 border-b border-slate-800 relative">
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="absolute top-3 right-3 sm:top-4 sm:right-4 p-2 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
+            aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
+
 
           <div className="flex items-center gap-2 mb-2">
             <span className="bg-emerald-500/20 text-emerald-300 font-bold px-3 py-0.5 rounded-full text-[11px] border border-emerald-500/40 flex items-center gap-1.5">
@@ -116,7 +118,8 @@ export const QuotationModal: React.FC<QuotationModalProps> = ({ isOpen, onClose 
         </div>
 
         {/* Modal Body */}
-        <div className="p-6">
+        <div className="p-4 sm:p-6 overflow-y-auto">
+
           {submitSuccess ? (
             <div className="py-8 flex flex-col items-center justify-center text-center space-y-3">
               <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-400/50 text-emerald-400 flex items-center justify-center animate-bounce">

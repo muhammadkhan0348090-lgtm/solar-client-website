@@ -40,16 +40,16 @@ export const VisualSearchModal: React.FC<VisualSearchModalProps> = ({
   return (
     <div
       id="visual-search-modal"
-      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4"
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200"
+        className="bg-white rounded-3xl w-[95vw] sm:w-[90vw] md:w-full max-w-lg p-5 sm:p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between pb-3 border-b border-gray-100">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
               <Camera className="w-4 h-4" />
             </div>
             <h3 className="text-base font-bold text-gray-900">
@@ -58,11 +58,13 @@ export const VisualSearchModal: React.FC<VisualSearchModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100"
+            className="p-2 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
+            aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
+
 
         <div className="mt-4">
           <p className="text-xs text-gray-500 mb-3">

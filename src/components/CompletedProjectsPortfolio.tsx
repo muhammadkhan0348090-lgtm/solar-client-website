@@ -89,7 +89,7 @@ export const CompletedProjectsPortfolio: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="flex sm:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 overflow-x-auto snap-x scrollbar-none pb-3 sm:pb-0">
         {filtered.map((proj, idx) => (
           <motion.div
             key={proj.id}
@@ -98,7 +98,7 @@ export const CompletedProjectsPortfolio: React.FC = () => {
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.4, delay: idx * 0.1, ease: 'easeOut' }}
             whileHover={{ y: -6, transition: { duration: 0.2 } }}
-            className="group rounded-3xl overflow-hidden bg-slate-900/90 border border-slate-800 hover:border-emerald-500/50 shadow-xl transition-all duration-300"
+            className="group rounded-3xl overflow-hidden bg-slate-900/90 border border-slate-800 hover:border-emerald-500/50 shadow-xl transition-all duration-300 w-[84vw] sm:w-auto shrink-0 snap-center"
           >
             <div className="relative h-48 overflow-hidden">
               <img
@@ -137,6 +137,7 @@ export const CompletedProjectsPortfolio: React.FC = () => {
           </motion.div>
         ))}
       </div>
+
     </motion.section>
   );
 };

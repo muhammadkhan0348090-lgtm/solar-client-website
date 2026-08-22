@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Camera, Mic, ChevronDown, Check, Sun, Sparkles, X, Tag, Phone, Mail, FileText, User, ShieldCheck, LogOut, Package } from 'lucide-react';
+import { Search, Camera, Mic, ChevronDown, Check, Sun, Sparkles, X, Tag, Phone, Mail, FileText, User, ShieldCheck, LogOut, Package, Menu } from 'lucide-react';
 import { generateQuotationPDF } from '../utils/pdfGenerator';
 
 interface TopBarProps {
@@ -15,6 +15,7 @@ interface TopBarProps {
   currentUser: any;
   onLogout: () => void;
   isListening?: boolean;
+  onToggleMobileMenu?: () => void;
 }
 
 export const TopBar: React.FC<TopBarProps> = ({
@@ -30,18 +31,27 @@ export const TopBar: React.FC<TopBarProps> = ({
   currentUser,
   onLogout,
   isListening = false,
+  onToggleMobileMenu,
 }) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   return (
     <header
       id="main-topbar"
-      className="sticky top-0 z-30 bg-slate-950/85 backdrop-blur-2xl px-4 sm:px-6 py-3 border-b border-slate-800/80 flex items-center justify-between gap-3 sm:gap-4 shadow-xl"
+      className="sticky top-0 z-30 bg-slate-950/85 backdrop-blur-2xl px-3 sm:px-6 py-2.5 sm:py-3 border-b border-slate-800/80 flex items-center justify-between gap-2 sm:gap-4 shadow-xl"
     >
-      {/* Brand Identity */}
+      {/* Mobile Drawer Hamburger & Brand Identity */}
       <div className="flex items-center gap-2">
-        <div className="flex items-center gap-2.5 font-semibold text-white tracking-tight">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-slate-950 shadow-lg shadow-amber-500/20 font-bold">
+        <button
+          onClick={onToggleMobileMenu}
+          className="md:hidden p-2 rounded-xl text-amber-400 hover:text-white hover:bg-slate-800/80 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
+          aria-label="Toggle navigation menu"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+
+        <div className="flex items-center gap-2 font-semibold text-white tracking-tight">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-slate-950 shadow-lg shadow-amber-500/20 font-bold shrink-0">
             <Sun className="w-5 h-5 fill-current" />
           </div>
           <div className="hidden sm:flex flex-col">
@@ -54,6 +64,7 @@ export const TopBar: React.FC<TopBarProps> = ({
           </div>
         </div>
       </div>
+
 
       {/* Main Search Input */}
       <div className="flex-1 max-w-xl">
@@ -111,7 +122,7 @@ export const TopBar: React.FC<TopBarProps> = ({
       </div>
 
       {/* Quick Actions & Auth Controls */}
-      <div className="flex items-center gap-2 sm:gap-2.5">
+      <div className="flex items-center gap-1.5 sm:gap-2.5">
         {/* PDF Download Button */}
         <button
           onClick={() =>
@@ -124,7 +135,7 @@ export const TopBar: React.FC<TopBarProps> = ({
               paybackTimeline: '2.5 Years',
             })
           }
-          className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900 border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-bold transition-all shadow-md"
+          className="hidden lg:flex items-center gap-1.5 px-3 py-2 rounded-full bg-slate-900 border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-bold transition-all shadow-md min-h-[44px] cursor-pointer"
           title="Download instant PDF solar proposal"
         >
           <FileText className="w-3.5 h-3.5 text-amber-400" />
@@ -135,7 +146,7 @@ export const TopBar: React.FC<TopBarProps> = ({
         <button
           id="topbar-get-quote-btn"
           onClick={onOpenQuotationModal}
-          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black shadow-lg transition-all active:scale-95 shrink-0"
+          className="flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs sm:text-xs font-black shadow-lg transition-all active:scale-95 shrink-0 min-h-[44px] cursor-pointer"
           title="Get a free solar system quotation"
         >
           <span>Get Quote</span>
@@ -144,7 +155,7 @@ export const TopBar: React.FC<TopBarProps> = ({
         {/* Admin Dashboard Quick Button */}
         <button
           onClick={onOpenAdminDashboard}
-          className="hidden sm:flex items-center gap-1 px-3 py-1.5 rounded-full bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs font-bold border border-emerald-400/40 transition-colors shadow-lg"
+          className="hidden sm:flex items-center gap-1 px-3 py-2 rounded-full bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs font-bold border border-emerald-400/40 transition-colors shadow-lg min-h-[44px] cursor-pointer"
           title="Open Protected Admin Leads & Orders Dashboard (/admin)"
         >
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
@@ -157,7 +168,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             <button
               id="profile-dropdown-btn"
               onClick={() => setShowProfileMenu(!showProfileMenu)}
-              className="flex items-center gap-1.5 p-1 rounded-full hover:bg-slate-800/80 transition-colors"
+              className="flex items-center gap-1.5 p-1 rounded-full hover:bg-slate-800/80 transition-colors min-h-[44px] min-w-[44px] justify-center cursor-pointer"
             >
               <div className="w-9 h-9 rounded-full bg-fuchsia-600 text-white font-bold text-sm flex items-center justify-center shadow-md border border-fuchsia-400/30">
                 {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'U'}
@@ -167,12 +178,13 @@ export const TopBar: React.FC<TopBarProps> = ({
           ) : (
             <button
               onClick={onOpenAuthModal}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900 hover:bg-slate-800 text-slate-200 text-xs font-bold border border-slate-700 transition-colors shadow-md"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-slate-900 hover:bg-slate-800 text-slate-200 text-xs font-bold border border-slate-700 transition-colors shadow-md min-h-[44px] cursor-pointer"
             >
               <User className="w-3.5 h-3.5 text-amber-400" />
               <span>Sign In</span>
             </button>
           )}
+
 
           {/* Profile Dropdown */}
           {showProfileMenu && currentUser && (

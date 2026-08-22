@@ -56,13 +56,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-md bg-slate-900 border border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden text-white">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/85 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="relative w-[95vw] sm:w-[90vw] md:w-full max-w-md bg-slate-900 border border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden text-white max-h-[90vh] flex flex-col">
+
         {/* Header */}
         <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-6 border-b border-slate-800 relative">
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="absolute top-4 right-4 p-2 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
+            aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
@@ -91,7 +93,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                 setActiveTab('login');
                 setErrorMessage('');
               }}
-              className={`flex-1 py-2 rounded-lg transition-all ${
+              className={`flex-1 py-2.5 rounded-lg transition-all min-h-[44px] cursor-pointer ${
                 activeTab === 'login' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -103,7 +105,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                 setActiveTab('register');
                 setErrorMessage('');
               }}
-              className={`flex-1 py-2 rounded-lg transition-all ${
+              className={`flex-1 py-2.5 rounded-lg transition-all min-h-[44px] cursor-pointer ${
                 activeTab === 'register' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -112,9 +114,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
           </div>
         </div>
 
-        {/* Body Form */}
-        <div className="p-6">
+        {/* Modal Form Body */}
+        <div className="p-6 overflow-y-auto">
           <form onSubmit={handleSubmit} className="space-y-4">
+
             {/* Red Error Message Banner on Failed Login/Register */}
             {errorMessage && (
               <div className="p-3.5 bg-red-950/90 border border-red-500/70 rounded-2xl text-red-200 text-xs font-bold flex items-center gap-2.5 shadow-lg animate-in fade-in">

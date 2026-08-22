@@ -367,7 +367,7 @@ export const PakistanRoiCalculator: React.FC<PakistanRoiCalculatorProps> = ({
                 <button
                   type="button"
                   onClick={() => setSystemType('ongrid')}
-                  className={`px-3 py-1 rounded-lg transition-all ${
+                  className={`px-3.5 py-2 rounded-lg transition-all min-h-[44px] cursor-pointer flex items-center justify-center ${
                     systemType === 'ongrid' ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
                   }`}
                 >
@@ -376,7 +376,7 @@ export const PakistanRoiCalculator: React.FC<PakistanRoiCalculatorProps> = ({
                 <button
                   type="button"
                   onClick={() => setSystemType('hybrid')}
-                  className={`px-3 py-1 rounded-lg transition-all flex items-center gap-1 ${
+                  className={`px-3.5 py-2 rounded-lg transition-all flex items-center justify-center gap-1.5 min-h-[44px] cursor-pointer ${
                     systemType === 'hybrid' ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
                   }`}
                 >

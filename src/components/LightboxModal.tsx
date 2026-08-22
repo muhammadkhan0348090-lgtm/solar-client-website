@@ -31,33 +31,34 @@ export const LightboxModal: React.FC<LightboxModalProps> = ({
       >
         {/* Top Control Bar */}
         <div className="w-full flex items-center justify-between text-white mb-3 px-2">
-          <span className="text-sm font-medium text-gray-200 truncate max-w-md">
+          <span className="text-xs sm:text-sm font-medium text-gray-200 truncate max-w-xs sm:max-w-md">
             {title}
           </span>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <button
               onClick={() => setScale((s) => Math.min(s + 0.25, 2.5))}
-              className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+              className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
               title="Zoom In"
             >
               <ZoomIn className="w-5 h-5" />
             </button>
             <button
               onClick={() => setScale((s) => Math.max(s - 0.25, 0.75))}
-              className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+              className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
               title="Zoom Out"
             >
               <ZoomOut className="w-5 h-5" />
             </button>
             <button
               onClick={onClose}
-              className="p-2 rounded-full bg-white/10 hover:bg-white/25 text-white transition-colors ml-2"
-              title="Close"
+              className="p-2 rounded-full bg-white/10 hover:bg-white/25 text-white transition-colors ml-1 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
+              aria-label="Close"
             >
               <X className="w-6 h-6" />
             </button>
           </div>
         </div>
+
 
         {/* Scaled Image */}
         <div className="overflow-auto max-h-[80vh] flex items-center justify-center rounded-2xl">

@@ -58,7 +58,7 @@ export const TestimonialsSection: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="flex md:grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 overflow-x-auto snap-x scrollbar-none pb-3 md:pb-0">
         {reviews.map((rev, idx) => (
           <motion.div
             key={rev.id}
@@ -67,7 +67,7 @@ export const TestimonialsSection: React.FC = () => {
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.5, delay: idx * 0.15, ease: 'easeOut' }}
             whileHover={{ y: -5, transition: { duration: 0.2 } }}
-            className="bg-slate-900/90 border border-slate-800 p-6 rounded-3xl space-y-4 shadow-xl relative overflow-hidden"
+            className="bg-slate-900/90 border border-slate-800 p-6 rounded-3xl space-y-4 shadow-xl relative overflow-hidden w-[84vw] md:w-auto shrink-0 snap-center"
           >
             <Quote className="w-8 h-8 text-emerald-500/20 absolute top-4 right-4" />
 
@@ -95,6 +95,7 @@ export const TestimonialsSection: React.FC = () => {
           </motion.div>
         ))}
       </div>
+
     </motion.section>
   );
 };

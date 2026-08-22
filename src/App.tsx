@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
-import { Sidebar } from './components/Sidebar';
+import { Sidebar, MobileDrawer } from './components/Sidebar';
 import { TopBar } from './components/TopBar';
 import { MainPinCard } from './components/MainPinCard';
 import { PinThumbnailCard } from './components/PinThumbnailCard';
@@ -38,6 +38,9 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
   const [showAdminDashboard, setShowAdminDashboard] = useState<boolean>(false);
+
+  // Mobile Navigation Drawer State
+  const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
 
   // Orders & Checkout States
   const [showUserOrdersModal, setShowUserOrdersModal] = useState<boolean>(false);
@@ -213,11 +216,11 @@ export default function App() {
   };
 
   return (
-    <div id="solar-company-app" className="relative min-h-screen text-white flex font-sans bg-slate-950">
+    <div id="solar-company-app" className="relative min-h-screen text-white flex font-sans bg-slate-950 max-w-full overflow-x-hidden">
       {/* Floating WhatsApp Action Button (+92-03480906798) */}
       <FloatingWhatsApp phoneNumber="923480906798" />
 
-      {/* Left Navigation Sidebar */}
+      {/* Left Navigation Sidebar (Desktop) */}
       <Sidebar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -225,8 +228,23 @@ export default function App() {
         onOpenCreateModal={() => setShowCreateModal(true)}
       />
 
-      {/* Main Page Layout */}
-      <div className="flex-1 ml-16 md:ml-18 flex flex-col min-h-screen">
+      {/* Mobile Navigation Drawer */}
+      <MobileDrawer
+        isOpen={showMobileMenu}
+        onClose={() => setShowMobileMenu(false)}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        onOpenSettings={() => setShowSettingsModal(true)}
+        onOpenCreateModal={() => setShowCreateModal(true)}
+        onOpenPakistanRates={() => setShowPakistanRatesModal(true)}
+        onOpenQuotationModal={() => setShowQuotationModal(true)}
+        onOpenAdminDashboard={() => setShowAdminDashboard(true)}
+        onOpenUserOrdersModal={() => setShowUserOrdersModal(true)}
+        currentUser={currentUser}
+      />
+
+      {/* Main Page Layout Container */}
+      <div className="flex-1 ml-0 md:ml-18 flex flex-col min-h-screen w-full max-w-full overflow-x-hidden">
         {/* Fixed TopBar Header */}
         <TopBar
           searchQuery={searchQuery}
@@ -241,7 +259,9 @@ export default function App() {
           currentUser={currentUser}
           onLogout={handleLogout}
           isListening={isVoiceListening}
+          onToggleMobileMenu={() => setShowMobileMenu(true)}
         />
+
 
         {/* 1. TOP HERO SCROLL ANIMATION SHOWCASE SECTION */}
         <section

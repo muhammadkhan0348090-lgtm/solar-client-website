@@ -156,10 +156,10 @@ export const SolarPackagesSection: React.FC<SolarPackagesSectionProps> = ({
               </div>
             </div>
 
-            <div className="pt-6 mt-6 border-t border-slate-800 space-y-2">
+            <div className="pt-6 mt-6 border-t border-slate-800 space-y-2.5">
               <button
                 onClick={() => onOpenCheckoutModal(pkg)}
-                className="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-transform active:scale-98 cursor-pointer"
+                className="w-full py-3 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-transform active:scale-98 cursor-pointer min-h-[44px]"
               >
                 <CreditCard className="w-4 h-4" />
                 <span>Book System (Easypaisa/Bank)</span>
@@ -176,12 +176,13 @@ export const SolarPackagesSection: React.FC<SolarPackagesSectionProps> = ({
                     paybackTimeline: '2.5 Years',
                   })
                 }
-                className="w-full py-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-300 font-bold text-xs flex items-center justify-center gap-2 border border-slate-800 transition-colors cursor-pointer"
+                className="w-full py-2.5 px-4 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-300 font-bold text-xs flex items-center justify-center gap-2 border border-slate-800 transition-colors cursor-pointer min-h-[44px]"
               >
                 <FileText className="w-3.5 h-3.5 text-amber-400" />
                 <span>Download Spec PDF</span>
               </button>
             </div>
+
           </motion.div>
         ))}
       </div>

@@ -113,25 +113,27 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl bg-slate-900 border border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden text-white flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/90 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="relative w-[95vw] sm:w-[90vw] md:w-full max-w-2xl bg-slate-900 border border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden text-white flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="bg-gradient-to-r from-amber-950 via-slate-900 to-slate-950 p-6 border-b border-slate-800 relative flex items-center justify-between">
+        <div className="bg-gradient-to-r from-amber-950 via-slate-900 to-slate-950 p-4 sm:p-6 border-b border-slate-800 relative flex items-center justify-between gap-2">
           <div>
             <span className="text-xs font-extrabold text-amber-400 uppercase tracking-widest flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              SECURE SOLAR CHECKOUT & PAYMENT GATEWAY
+              <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+              SECURE SOLAR CHECKOUT
             </span>
-            <h3 className="text-xl font-black text-white mt-1">{selectedPackage.title}</h3>
+            <h3 className="text-lg sm:text-xl font-black text-white mt-0.5">{selectedPackage.title}</h3>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer shrink-0"
+            aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
+
 
         {/* Content Body */}
         <div className="p-6 overflow-y-auto space-y-6">
