@@ -1,0 +1,129 @@
+(function () {
+  const TOTAL_FRAMES = 192;
+  const canvas = document.getElementById('scroll-canvas');
+  const ctx = canvas.getContext('2d', { alpha: false });
+  const loader = document.getElementById('loader');
+  const loaderBar = document.getElementById('loader-bar');
+
+  const images = [];
+  let loadedCount = 0;
+
+  let targetFrame = 0;
+  let currentFrame = 0;
+  let isLoaded = false;
+
+  // Format frame filename with 6 digits padding: frame_000000.jpg ... frame_000191.jpg
+  function getFrameUrl(index) {
+    const padIndex = String(index).padStart(6, '0');
+    return `frames_extracted/frame_${padIndex}.jpg`;
+  }
+
+  // Preload all 192 frame images
+  function preloadImages() {
+    for (let i = 0; i < TOTAL_FRAMES; i++) {
+      const img = new Image();
+      img.src = getFrameUrl(i);
+
+      img.onload = () => {
+        loadedCount++;
+        const percent = Math.floor((loadedCount / TOTAL_FRAMES) * 100);
+        if (loaderBar) {
+          loaderBar.style.width = `${percent}%`;
+        }
+
+        if (loadedCount === TOTAL_FRAMES) {
+          onAllImagesLoaded();
+        }
+      };
+
+      img.onerror = () => {
+        console.warn(`Failed to load frame: ${getFrameUrl(i)}`);
+        loadedCount++;
+        if (loadedCount === TOTAL_FRAMES) {
+          onAllImagesLoaded();
+        }
+      };
+
+      images.push(img);
+    }
+  }
+
+  function onAllImagesLoaded() {
+    isLoaded = true;
+    updateTargetFrame();
+    currentFrame = targetFrame; // Start directly at current scroll position
+
+    // Fade out preloader screen
+    if (loader) {
+      loader.classList.add('fade-out');
+    }
+
+    // Start render loop
+    requestAnimationFrame(renderLoop);
+  }
+
+  // Canvas size and DPR adjustment
+  function resizeCanvas() {
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+
+    // Redraw current frame immediately on resize
+    if (isLoaded) {
+      drawFrame(Math.round(currentFrame));
+    }
+  }
+
+  // Update target frame based on page scroll fraction
+  function updateTargetFrame() {
+    const scrollTop = window.scrollY || window.pageYOffset || 0;
+    const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    const scrollFraction = Math.max(0, Math.min(1, scrollTop / maxScroll));
+    targetFrame = scrollFraction * (TOTAL_FRAMES - 1);
+  }
+
+  // Draw image using 'cover' aspect ratio algorithm
+  function drawFrame(index) {
+    const img = images[index];
+    if (!img || !img.complete || img.naturalWidth === 0) return;
+
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+    const imgWidth = img.naturalWidth;
+    const imgHeight = img.naturalHeight;
+
+    // Calculate scale factor for 'cover'
+    const scale = Math.max(canvasWidth / imgWidth, canvasHeight / imgHeight);
+    const drawWidth = imgWidth * scale;
+    const drawHeight = imgHeight * scale;
+
+    const offsetX = (canvasWidth - drawWidth) / 2;
+    const offsetY = (canvasHeight - drawHeight) / 2;
+
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+  }
+
+  // Continuous animation frame loop with linear interpolation (Lerp)
+  function renderLoop() {
+    if (!isLoaded) return;
+
+    // Inertia easing factor (0.14 for buttery smooth scroll scrubbing)
+    const diff = targetFrame - currentFrame;
+    currentFrame += diff * 0.14;
+
+    const frameToDraw = Math.min(TOTAL_FRAMES - 1, Math.max(0, Math.round(currentFrame)));
+    drawFrame(frameToDraw);
+
+    requestAnimationFrame(renderLoop);
+  }
+
+  // Event Listeners
+  window.addEventListener('scroll', updateTargetFrame, { passive: true });
+  window.addEventListener('resize', resizeCanvas);
+
+  // Initialize
+  resizeCanvas();
+  preloadImages();
+})();

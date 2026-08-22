@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.zip
+*.mp4
+*.db*
+.env
+frames_extracted/
+solar_company_extracted/
