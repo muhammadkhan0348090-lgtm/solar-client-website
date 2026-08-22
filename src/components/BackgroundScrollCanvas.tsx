@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Sun, Sparkles, ArrowDown, ShieldCheck, Zap } from 'lucide-react';
+import { Sun, Sparkles, ArrowDown, ShieldCheck, Zap, Layers } from 'lucide-react';
 
 const TOTAL_FRAMES = 192;
 
@@ -7,14 +7,26 @@ interface HeroCanvasProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
 }
 
+interface Particle {
+  x: number;
+  y: number;
+  radius: number;
+  color: string;
+  vx: number;
+  vy: number;
+  pulseSpeed: number;
+  alpha: number;
+}
+
 export const HeroScrollCanvas: React.FC<HeroCanvasProps> = ({ containerRef }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [loadedCount, setLoadedCount] = useState(0);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isFrameMode, setIsFrameMode] = useState<boolean>(true);
   const [activeFrameDisplay, setActiveFrameDisplay] = useState(1);
   const [scrollPercentDisplay, setScrollPercentDisplay] = useState(0);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const animationFrameId = useRef<number | null>(null);
+  const particlesRef = useRef<Particle[]>([]);
   
   const targetFrameRef = useRef(0);
   const currentFrameRef = useRef(0);
@@ -24,9 +36,19 @@ export const HeroScrollCanvas: React.FC<HeroCanvasProps> = ({ containerRef }) =>
     return `/frames_extracted/frame_${padIndex}.jpg`;
   };
 
+  // Preload frame images without blocking instant page load
   useEffect(() => {
     let count = 0;
+    let failedCount = 0;
     const imgArray: HTMLImageElement[] = [];
+
+    // Test first frame image availability
+    const testImg = new Image();
+    testImg.src = getFrameUrl(0);
+    testImg.onerror = () => {
+      // If frame_000000.jpg missing or unaccessible, fallback immediately to solar grid particle mode
+      setIsFrameMode(false);
+    };
 
     for (let i = 0; i < TOTAL_FRAMES; i++) {
       const img = new Image();
@@ -35,16 +57,13 @@ export const HeroScrollCanvas: React.FC<HeroCanvasProps> = ({ containerRef }) =>
       img.onload = () => {
         count++;
         setLoadedCount(count);
-        if (count === TOTAL_FRAMES) {
-          setIsLoaded(true);
-        }
       };
 
       img.onerror = () => {
-        count++;
-        setLoadedCount(count);
-        if (count === TOTAL_FRAMES) {
-          setIsLoaded(true);
+        failedCount++;
+        if (failedCount > 10) {
+          // If multiple frames fail to load, switch to sleek high-tech particle fallback
+          setIsFrameMode(false);
         }
       };
 
@@ -58,6 +77,27 @@ export const HeroScrollCanvas: React.FC<HeroCanvasProps> = ({ containerRef }) =>
     };
   }, []);
 
+  // Initialize particle effects for fallback mode
+  useEffect(() => {
+    const particles: Particle[] = [];
+    const colors = ['#f59e0b', '#10b981', '#3b82f6', '#34d399', '#fbbf24'];
+
+    for (let i = 0; i < 65; i++) {
+      particles.push({
+        x: Math.random(),
+        y: Math.random(),
+        radius: Math.random() * 2.5 + 1,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        vx: (Math.random() - 0.5) * 0.0005,
+        vy: -Math.random() * 0.001 - 0.0003,
+        pulseSpeed: Math.random() * 0.03 + 0.01,
+        alpha: Math.random() * 0.7 + 0.3,
+      });
+    }
+
+    particlesRef.current = particles;
+  }, []);
+
   // Update target frame based on scroll position inside containerRef
   useEffect(() => {
     const handleScroll = () => {
@@ -67,7 +107,6 @@ export const HeroScrollCanvas: React.FC<HeroCanvasProps> = ({ containerRef }) =>
       const rect = container.getBoundingClientRect();
       const containerHeight = container.offsetHeight - window.innerHeight;
       
-      // Calculate scroll fraction inside top hero section
       const scrolled = -rect.top;
       const fraction = Math.max(0, Math.min(1, scrolled / Math.max(1, containerHeight)));
 
@@ -83,7 +122,7 @@ export const HeroScrollCanvas: React.FC<HeroCanvasProps> = ({ containerRef }) =>
     };
   }, [containerRef]);
 
-  // Canvas resize and render loop
+  // Main Canvas render loop (supports frame sequence & fallback particle solar grid)
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -99,16 +138,19 @@ export const HeroScrollCanvas: React.FC<HeroCanvasProps> = ({ containerRef }) =>
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    const drawFrame = (frameIndex: number) => {
+    // Draw frame image sequence
+    const drawFrameImage = (frameIndex: number) => {
       const img = imagesRef.current[frameIndex];
-      if (!img || !img.complete || img.naturalWidth === 0) return;
+      if (!img || !img.complete || img.naturalWidth === 0) {
+        drawSolarParticleGrid();
+        return;
+      }
 
       const canvasWidth = canvas.width;
       const canvasHeight = canvas.height;
       const imgWidth = img.naturalWidth;
       const imgHeight = img.naturalHeight;
 
-      // Cover scaling
       const scale = Math.max(canvasWidth / imgWidth, canvasHeight / imgHeight);
       const drawWidth = imgWidth * scale;
       const drawHeight = imgHeight * scale;
@@ -116,9 +158,97 @@ export const HeroScrollCanvas: React.FC<HeroCanvasProps> = ({ containerRef }) =>
       const offsetX = (canvasWidth - drawWidth) / 2;
       const offsetY = (canvasHeight - drawHeight) / 2;
 
-      ctx.fillStyle = '#050811';
+      ctx.fillStyle = '#030712';
       ctx.fillRect(0, 0, canvasWidth, canvasHeight);
       ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+    };
+
+    // Sleek High-Tech Animated CSS & Canvas Solar Grid Particles Fallback
+    const drawSolarParticleGrid = () => {
+      const width = canvas.width;
+      const height = canvas.height;
+      const scrollRatio = targetFrameRef.current / (TOTAL_FRAMES - 1);
+
+      // Dark futuristic slate background gradient
+      const bgGrad = ctx.createLinearGradient(0, 0, width, height);
+      bgGrad.addColorStop(0, '#020617');
+      bgGrad.addColorStop(0.5, '#071527');
+      bgGrad.addColorStop(1, '#022c22');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, width, height);
+
+      // Solar Sun Core Pulsing Glow
+      const sunX = width * 0.5;
+      const sunY = height * (0.35 + scrollRatio * 0.1);
+      const sunRadius = Math.min(width, height) * 0.28;
+      const sunGrad = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, sunRadius * 1.8);
+      sunGrad.addColorStop(0, 'rgba(251, 191, 36, 0.45)');
+      sunGrad.addColorStop(0.3, 'rgba(16, 185, 129, 0.25)');
+      sunGrad.addColorStop(0.7, 'rgba(15, 23, 42, 0.15)');
+      sunGrad.addColorStop(1, 'rgba(2, 6, 23, 0)');
+
+      ctx.fillStyle = sunGrad;
+      ctx.beginPath();
+      ctx.arc(sunX, sunY, sunRadius * 1.8, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Perspective Solar Grid Lines
+      ctx.strokeStyle = 'rgba(16, 185, 129, 0.15)';
+      ctx.lineWidth = 1.2;
+      const gridSpacing = 60;
+      const gridOffset = (scrollRatio * 180) % gridSpacing;
+
+      // Horizontal perspective grid
+      for (let y = gridOffset; y < height; y += gridSpacing) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+      }
+
+      // Vertical converging perspective grid
+      const cols = 14;
+      for (let i = 0; i <= cols; i++) {
+        const xPos = (width / cols) * i;
+        ctx.beginPath();
+        ctx.moveTo(sunX, sunY);
+        ctx.lineTo(xPos, height);
+        ctx.stroke();
+      }
+
+      // Animated Solar Photon Particles
+      const particles = particlesRef.current;
+      particles.forEach((p) => {
+        p.y += p.vy;
+        p.x += p.vx;
+
+        if (p.y < 0) p.y = 1;
+        if (p.x < 0) p.x = 1;
+        if (p.x > 1) p.x = 0;
+
+        const px = p.x * width;
+        const py = p.y * height;
+
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = 10;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(px, py, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+
+      // Circuit Node Connection Lines to solar center
+      ctx.strokeStyle = 'rgba(245, 158, 11, 0.2)';
+      ctx.lineWidth = 1.5;
+      particles.slice(0, 12).forEach((p) => {
+        ctx.beginPath();
+        ctx.moveTo(p.x * width, p.y * height);
+        ctx.lineTo(sunX, sunY);
+        ctx.stroke();
+      });
     };
 
     const renderLoop = () => {
@@ -131,14 +261,17 @@ export const HeroScrollCanvas: React.FC<HeroCanvasProps> = ({ containerRef }) =>
       );
 
       setActiveFrameDisplay(frameToDraw + 1);
-      drawFrame(frameToDraw);
+
+      if (isFrameMode && imagesRef.current.length > 0 && imagesRef.current[frameToDraw]?.complete) {
+        drawFrameImage(frameToDraw);
+      } else {
+        drawSolarParticleGrid();
+      }
 
       animationFrameId.current = requestAnimationFrame(renderLoop);
     };
 
-    if (isLoaded) {
-      animationFrameId.current = requestAnimationFrame(renderLoop);
-    }
+    animationFrameId.current = requestAnimationFrame(renderLoop);
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
@@ -146,16 +279,17 @@ export const HeroScrollCanvas: React.FC<HeroCanvasProps> = ({ containerRef }) =>
         cancelAnimationFrame(animationFrameId.current);
       }
     };
-  }, [isLoaded]);
-
-  const loadPercent = Math.floor((loadedCount / TOTAL_FRAMES) * 100);
+  }, [isFrameMode]);
 
   return (
     <div className="sticky top-0 w-full h-screen overflow-hidden flex items-center justify-center bg-slate-950 text-white">
+      {/* Dynamic Animated CSS Gradient & Solar Grid Particles Canvas */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black z-0" />
+
       {/* Background Canvas */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full object-cover z-0 block"
+        className="absolute inset-0 w-full h-full object-cover z-0 block opacity-90 transition-opacity duration-500"
       />
 
       {/* Dark Overlay Gradient for High Contrast */}
@@ -165,7 +299,9 @@ export const HeroScrollCanvas: React.FC<HeroCanvasProps> = ({ containerRef }) =>
       <div className="relative z-20 max-w-5xl mx-auto px-6 text-center space-y-6">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-xl border border-amber-400/40 text-amber-300 text-xs font-black shadow-2xl animate-pulse">
           <Sparkles className="w-4 h-4 text-amber-400" />
-          <span>192-FRAME INTERACTIVE SCROLL ANIMATION SHOWCASE</span>
+          <span>
+            {isFrameMode ? '192-FRAME INTERACTIVE SCROLL ANIMATION SHOWCASE' : 'HIGH-TECH SOLAR GRID ANIMATION SHOWCASE'}
+          </span>
         </div>
 
         <h1 className="text-3xl sm:text-6xl font-black text-white tracking-tight leading-tight drop-shadow-2xl">
@@ -176,15 +312,15 @@ export const HeroScrollCanvas: React.FC<HeroCanvasProps> = ({ containerRef }) =>
         </h1>
 
         <p className="text-sm sm:text-lg text-slate-200 max-w-2xl mx-auto font-medium drop-shadow-md leading-relaxed">
-          Scroll down to scrub through 192 high-resolution video frames of rooftop solar installation, explore live Pakistani market rates, and calculate turn-key ROI savings.
+          Scroll down to scrub through rooftop solar energy technology, explore live Pakistani market rates, and calculate turn-key ROI savings.
         </p>
 
-        {/* Live Frame Badge & Progress */}
+        {/* Live Frame / Progress Badge */}
         <div className="inline-flex items-center gap-4 bg-slate-950/80 backdrop-blur-2xl border border-slate-700/80 px-5 py-2.5 rounded-full shadow-2xl text-xs">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
             <span className="font-mono text-emerald-300 font-bold text-sm">
-              Frame {activeFrameDisplay} / {TOTAL_FRAMES}
+              {isFrameMode ? `Frame ${activeFrameDisplay} / ${TOTAL_FRAMES}` : 'Solar Particles Active'}
             </span>
           </div>
           <div className="w-24 h-2 bg-slate-800 rounded-full overflow-hidden border border-slate-700">
@@ -202,26 +338,7 @@ export const HeroScrollCanvas: React.FC<HeroCanvasProps> = ({ containerRef }) =>
           <ArrowDown className="w-5 h-5 text-amber-400" />
         </div>
       </div>
-
-      {/* Preloader Screen */}
-      <div
-        className={`absolute inset-0 z-50 bg-[#050811] flex flex-col items-center justify-center gap-4 transition-opacity duration-700 pointer-events-none ${
-          isLoaded ? 'opacity-0 invisible' : 'opacity-100 visible'
-        }`}
-      >
-        <div className="w-14 h-14 border-4 border-emerald-500/20 border-t-amber-400 rounded-full animate-spin"></div>
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-white font-bold text-sm tracking-wider uppercase">
-            Loading Solar Frame Sequence ({loadPercent}%)
-          </span>
-          <div className="w-64 h-2 bg-slate-800 rounded-full overflow-hidden border border-slate-700">
-            <div
-              className="h-full bg-gradient-to-r from-amber-400 to-emerald-400 transition-all duration-150 ease-out"
-              style={{ width: `${loadPercent}%` }}
-            ></div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
+

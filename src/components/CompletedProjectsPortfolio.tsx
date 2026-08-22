@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { MapPin, Zap, TrendingDown, CheckCircle2 } from 'lucide-react';
 
 export const CompletedProjectsPortfolio: React.FC = () => {
@@ -54,7 +55,14 @@ export const CompletedProjectsPortfolio: React.FC = () => {
   const filtered = selectedCity === 'all' ? projects : projects.filter((p) => p.city.toLowerCase() === selectedCity.toLowerCase());
 
   return (
-    <section id="completed-projects-portfolio" className="space-y-6 text-white">
+    <motion.section
+      id="completed-projects-portfolio"
+      className="space-y-6 text-white"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
+    >
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">Proven Track Record</span>
@@ -69,7 +77,7 @@ export const CompletedProjectsPortfolio: React.FC = () => {
             <button
               key={city}
               onClick={() => setSelectedCity(city)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
                 selectedCity === city
                   ? 'bg-emerald-500 text-slate-950 shadow-md'
                   : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
@@ -82,9 +90,14 @@ export const CompletedProjectsPortfolio: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {filtered.map((proj) => (
-          <div
+        {filtered.map((proj, idx) => (
+          <motion.div
             key={proj.id}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.4, delay: idx * 0.1, ease: 'easeOut' }}
+            whileHover={{ y: -6, transition: { duration: 0.2 } }}
             className="group rounded-3xl overflow-hidden bg-slate-900/90 border border-slate-800 hover:border-emerald-500/50 shadow-xl transition-all duration-300"
           >
             <div className="relative h-48 overflow-hidden">
@@ -121,9 +134,10 @@ export const CompletedProjectsPortfolio: React.FC = () => {
                 <span className="text-amber-400 font-bold">{proj.savings}</span>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
-    </section>
+    </motion.section>
   );
 };
+

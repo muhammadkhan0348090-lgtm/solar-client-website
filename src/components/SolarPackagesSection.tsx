@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Sun, Zap, ShieldCheck, CheckCircle2, ArrowRight, Award, FileText, CreditCard } from 'lucide-react';
 import { generateQuotationPDF } from '../utils/pdfGenerator';
 
@@ -86,7 +87,14 @@ export const SolarPackagesSection: React.FC<SolarPackagesSectionProps> = ({
   ];
 
   return (
-    <section id="solar-packages-section" className="space-y-6 text-white">
+    <motion.section
+      id="solar-packages-section"
+      className="space-y-6 text-white"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
+    >
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">Turn-Key Bundles</span>
@@ -101,12 +109,17 @@ export const SolarPackagesSection: React.FC<SolarPackagesSectionProps> = ({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {packages.map((pkg) => (
-          <div
+        {packages.map((pkg, idx) => (
+          <motion.div
             key={pkg.id}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.5, delay: idx * 0.15, ease: 'easeOut' }}
+            whileHover={{ scale: pkg.popular ? 1.03 : 1.02, transition: { duration: 0.2 } }}
             className={`relative rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 ${
               pkg.popular
-                ? 'bg-slate-900 border-2 border-emerald-400 shadow-2xl shadow-emerald-500/10 scale-102'
+                ? 'bg-slate-900 border-2 border-emerald-400 shadow-2xl shadow-emerald-500/10'
                 : 'bg-slate-900/80 border border-slate-800 hover:border-slate-700 shadow-xl'
             }`}
           >
@@ -134,8 +147,8 @@ export const SolarPackagesSection: React.FC<SolarPackagesSectionProps> = ({
 
               <div className="space-y-2 text-xs">
                 <p className="font-bold text-slate-200">Package Highlights:</p>
-                {pkg.features.map((feat, idx) => (
-                  <div key={idx} className="flex items-start gap-2 text-slate-300">
+                {pkg.features.map((feat, fIdx) => (
+                  <div key={fIdx} className="flex items-start gap-2 text-slate-300">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                     <span>{feat}</span>
                   </div>
@@ -146,7 +159,7 @@ export const SolarPackagesSection: React.FC<SolarPackagesSectionProps> = ({
             <div className="pt-6 mt-6 border-t border-slate-800 space-y-2">
               <button
                 onClick={() => onOpenCheckoutModal(pkg)}
-                className="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-transform active:scale-98"
+                className="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-transform active:scale-98 cursor-pointer"
               >
                 <CreditCard className="w-4 h-4" />
                 <span>Book System (Easypaisa/Bank)</span>
@@ -163,15 +176,16 @@ export const SolarPackagesSection: React.FC<SolarPackagesSectionProps> = ({
                     paybackTimeline: '2.5 Years',
                   })
                 }
-                className="w-full py-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-300 font-bold text-xs flex items-center justify-center gap-2 border border-slate-800 transition-colors"
+                className="w-full py-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-300 font-bold text-xs flex items-center justify-center gap-2 border border-slate-800 transition-colors cursor-pointer"
               >
                 <FileText className="w-3.5 h-3.5 text-amber-400" />
                 <span>Download Spec PDF</span>
               </button>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
-    </section>
+    </motion.section>
   );
 };
+

@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import {
   Calculator,
   Zap,
@@ -66,7 +67,6 @@ export const PakistanRoiCalculator: React.FC<PakistanRoiCalculatorProps> = ({
   // Recommended system capacity in kW (rounded to nearest 0.5 kW)
   const recommendedKw = useMemo(() => {
     const rawKw = monthlyKwh / avgUnitsPerKwMonth;
-    // clamp between 1.5 kW and 50 kW
     const rounded = Math.max(1.5, Math.min(50, Math.round(rawKw * 2) / 2));
     return rounded;
   }, [monthlyKwh]);
@@ -84,12 +84,10 @@ export const PakistanRoiCalculator: React.FC<PakistanRoiCalculatorProps> = ({
   const rooftopAreaSqFt = Math.round(actualSolarCapacityKw * 75);
 
   // Costs breakdown in PKR:
-  // 1. Tier-1 Solar Plates
   const platesCost = useMemo(() => {
     return Math.round(actualSolarCapacityWatts * selectedBrandRate);
   }, [actualSolarCapacityWatts, selectedBrandRate]);
 
-  // 2. Inverter Cost (FoxESS, Growatt, Nitrox, Knox, Huawei, Solis)
   const inverterCost = useMemo(() => {
     if (systemType === 'hybrid') {
       if (recommendedKw <= 3.6) return 165000;
@@ -98,7 +96,6 @@ export const PakistanRoiCalculator: React.FC<PakistanRoiCalculatorProps> = ({
       if (recommendedKw <= 15) return 520000;
       return Math.round(recommendedKw * 34000);
     } else {
-      // On-grid string inverter
       if (recommendedKw <= 3.5) return 95000;
       if (recommendedKw <= 5) return 145000;
       if (recommendedKw <= 10) return 225000;
@@ -108,7 +105,6 @@ export const PakistanRoiCalculator: React.FC<PakistanRoiCalculatorProps> = ({
     }
   }, [systemType, recommendedKw]);
 
-  // 3. Lithium Battery Bank (if Hybrid selected)
   const batteryCost = useMemo(() => {
     if (systemType !== 'hybrid') return 0;
     if (recommendedKw <= 5) return 320000;
@@ -116,30 +112,25 @@ export const PakistanRoiCalculator: React.FC<PakistanRoiCalculatorProps> = ({
     return 850000;
   }, [systemType, recommendedKw]);
 
-  // 4. Mounting Structure, DC/AC Cables, SPD, Earth Boring
   const structureAndBalanceOfSystemCost = useMemo(() => {
     return Math.round(actualSolarCapacityKw * 23500);
   }, [actualSolarCapacityKw]);
 
-  // 5. Net Metering License & DISCO Approval
   const netMeteringCost = useMemo(() => {
     if (!includeNetMetering) return 0;
     return 125000;
   }, [includeNetMetering]);
 
-  // Total Initial Capital Investment (PKR)
   const totalSystemCost = useMemo(() => {
     return platesCost + inverterCost + batteryCost + structureAndBalanceOfSystemCost + netMeteringCost;
   }, [platesCost, inverterCost, batteryCost, structureAndBalanceOfSystemCost, netMeteringCost]);
 
-  // Monthly & Annual Energy Generation
   const monthlySolarGeneratedKwh = useMemo(() => {
     return Math.round(actualSolarCapacityKw * avgUnitsPerKwMonth);
   }, [actualSolarCapacityKw]);
 
   const annualSolarGeneratedKwh = monthlySolarGeneratedKwh * 12;
 
-  // Monthly & Annual Financial Savings
   const monthlySavingsPkr = useMemo(() => {
     const effectiveUnits = Math.min(monthlyKwh, monthlySolarGeneratedKwh);
     const surplusUnits = Math.max(0, monthlySolarGeneratedKwh - monthlyKwh);
@@ -150,7 +141,6 @@ export const PakistanRoiCalculator: React.FC<PakistanRoiCalculatorProps> = ({
 
   const annualSavingsPkr = monthlySavingsPkr * 12;
 
-  // Payback Period
   const paybackYearsRaw = useMemo(() => {
     if (annualSavingsPkr <= 0) return 0;
     return totalSystemCost / annualSavingsPkr;
@@ -159,7 +149,6 @@ export const PakistanRoiCalculator: React.FC<PakistanRoiCalculatorProps> = ({
   const paybackYears = Math.floor(paybackYearsRaw);
   const paybackMonths = Math.round((paybackYearsRaw - paybackYears) * 12);
 
-  // Lifetime Cumulative Returns
   const lifetimeSavings25Years = useMemo(() => {
     let total = 0;
     let currentAnnualSaving = annualSavingsPkr;
@@ -183,7 +172,15 @@ export const PakistanRoiCalculator: React.FC<PakistanRoiCalculatorProps> = ({
   ];
 
   return (
-    <div id="pakistan-roi-calculator-widget" className="space-y-5 text-white">
+    <motion.div
+      id="pakistan-roi-calculator-widget"
+      className="space-y-5 text-white"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
+    >
+
       {/* Header & Badges */}
       <div className="bg-emerald-950/90 backdrop-blur-2xl p-5 sm:p-6 rounded-3xl relative overflow-hidden shadow-2xl border border-emerald-500/40">
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -528,6 +525,7 @@ export const PakistanRoiCalculator: React.FC<PakistanRoiCalculatorProps> = ({
           <span className="text-emerald-400 font-bold">Years 3-25 (100% Free Energy)</span>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
+

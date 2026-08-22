@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Star, CheckCircle2, Quote, Award } from 'lucide-react';
 
 export const TestimonialsSection: React.FC = () => {
@@ -30,7 +31,14 @@ export const TestimonialsSection: React.FC = () => {
   ];
 
   return (
-    <section id="client-testimonials-section" className="space-y-6 text-white">
+    <motion.section
+      id="client-testimonials-section"
+      className="space-y-6 text-white"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
+    >
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold text-amber-400 uppercase tracking-widest">Verified Feedback</span>
@@ -51,9 +59,14 @@ export const TestimonialsSection: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {reviews.map((rev) => (
-          <div
+        {reviews.map((rev, idx) => (
+          <motion.div
             key={rev.id}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.5, delay: idx * 0.15, ease: 'easeOut' }}
+            whileHover={{ y: -5, transition: { duration: 0.2 } }}
             className="bg-slate-900/90 border border-slate-800 p-6 rounded-3xl space-y-4 shadow-xl relative overflow-hidden"
           >
             <Quote className="w-8 h-8 text-emerald-500/20 absolute top-4 right-4" />
@@ -79,9 +92,10 @@ export const TestimonialsSection: React.FC = () => {
                 {rev.systemSize}
               </span>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
-    </section>
+    </motion.section>
   );
 };
+
