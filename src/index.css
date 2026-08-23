@@ -13,12 +13,31 @@ html, body {
   box-sizing: border-box;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
+  background-color: #020617;
+  color: #ffffff;
 }
 
 #root {
   width: 100%;
   max-width: 100vw;
   overflow-x: hidden;
+}
+
+/* Custom Scrollbar for Modals & Containers */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(51, 65, 85, 0.8);
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(16, 185, 129, 0.8);
 }
 
 .touch-target {
@@ -34,3 +53,14 @@ html, body {
   scrollbar-width: none;
 }
 
+/* Responsive Image & Embed Safeguards */
+img, video, iframe, canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Word break safeguards to prevent text clipping */
+h1, h2, h3, h4, h5, h6, p, span, a, button {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}

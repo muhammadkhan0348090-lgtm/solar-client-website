@@ -184,7 +184,7 @@ export const PackageComparisonModal: React.FC<PackageComparisonModalProps> = ({
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative w-full max-w-6xl bg-slate-900 border-2 border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden text-white z-10 my-auto"
+          className="relative w-[95vw] sm:w-[90vw] md:w-full max-w-6xl max-h-[90vh] flex flex-col bg-slate-900 border-2 border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden text-white z-10 my-auto"
         >
           {/* Header */}
           <div className="p-5 sm:p-6 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
