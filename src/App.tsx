@@ -20,6 +20,9 @@ import { SolarPackagesSection } from './components/SolarPackagesSection';
 import { CompletedProjectsPortfolio } from './components/CompletedProjectsPortfolio';
 import { TestimonialsSection } from './components/TestimonialsSection';
 import { FaqSection } from './components/FaqSection';
+import { RoofLoadSizer } from './components/RoofLoadSizer';
+import { NetMeteringSimulator } from './components/NetMeteringSimulator';
+import { PackageComparisonModal } from './components/PackageComparisonModal';
 import { initialPins, pakistanMarketRates } from './data';
 import { PinItem, Comment } from './types';
 import { TrendingDown, Tag, ChevronRight, Zap, Sun, ShieldCheck, ArrowDown, Award, Sparkles, CheckCircle2, Phone, Mail, FileText, MessageCircle, Send } from 'lucide-react';
@@ -54,6 +57,7 @@ export default function App() {
   const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false);
   const [showPakistanRatesModal, setShowPakistanRatesModal] = useState<boolean>(false);
   const [showQuotationModal, setShowQuotationModal] = useState<boolean>(false);
+  const [showPackageComparisonModal, setShowPackageComparisonModal] = useState<boolean>(false);
   const [isVoiceListening, setIsVoiceListening] = useState<boolean>(false);
 
   // Strict session verification on page load via GET /api/auth/me
@@ -308,11 +312,22 @@ export default function App() {
           </button>
         </section>
 
-        {/* 3. TURN-KEY SOLAR PACKAGES SECTION */}
+        {/* 3. AI ROOF SOLAR VIABILITY & LOAD SIZER TOOL */}
+        <section id="ai-roof-sizer-container" className="relative z-20 bg-slate-950/95 p-4 sm:p-8 max-w-7xl mx-auto w-full pt-10">
+          <RoofLoadSizer />
+        </section>
+
+        {/* 4. NET METERING GREEN ENERGY SAVINGS SIMULATOR TOOL */}
+        <section id="net-metering-simulator-container" className="relative z-20 bg-slate-950/95 p-4 sm:p-8 max-w-7xl mx-auto w-full pt-10">
+          <NetMeteringSimulator />
+        </section>
+
+        {/* 5. TURN-KEY SOLAR PACKAGES SECTION */}
         <section id="turnkey-packages-container" className="relative z-20 bg-slate-950/95 p-4 sm:p-8 max-w-7xl mx-auto w-full pt-10">
           <SolarPackagesSection
             onOpenQuotationModal={() => setShowQuotationModal(true)}
             onOpenCheckoutModal={(pkg) => setSelectedPackageForCheckout(pkg)}
+            onOpenComparisonModal={() => setShowPackageComparisonModal(true)}
           />
         </section>
 
@@ -582,6 +597,13 @@ export default function App() {
       <PakistanRatesModal
         isOpen={showPakistanRatesModal}
         onClose={() => setShowPakistanRatesModal(false)}
+      />
+
+      {/* Live Package Comparison Matrix Modal */}
+      <PackageComparisonModal
+        isOpen={showPackageComparisonModal}
+        onClose={() => setShowPackageComparisonModal(false)}
+        onSelectPackageForCheckout={(pkg) => setSelectedPackageForCheckout(pkg)}
       />
     </div>
   );

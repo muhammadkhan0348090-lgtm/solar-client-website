@@ -1,9 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Sun, Zap, ShieldCheck, CheckCircle2, ArrowRight, Award, FileText, CreditCard } from 'lucide-react';
+import { Sun, Zap, ShieldCheck, CheckCircle2, ArrowRight, Award, FileText, CreditCard, Layers, Sparkles } from 'lucide-react';
 import { generateQuotationPDF } from '../utils/pdfGenerator';
 
-interface PackageItem {
+export interface PackageItem {
   id: string;
   title: string;
   subtitle: string;
@@ -20,11 +20,13 @@ interface PackageItem {
 interface SolarPackagesSectionProps {
   onOpenQuotationModal: () => void;
   onOpenCheckoutModal: (pkg: PackageItem) => void;
+  onOpenComparisonModal?: () => void;
 }
 
 export const SolarPackagesSection: React.FC<SolarPackagesSectionProps> = ({
   onOpenQuotationModal,
   onOpenCheckoutModal,
+  onOpenComparisonModal,
 }) => {
   const packages: PackageItem[] = [
     {
@@ -89,33 +91,55 @@ export const SolarPackagesSection: React.FC<SolarPackagesSectionProps> = ({
   return (
     <section
       id="solar-packages-section"
-      className="space-y-6 text-white opacity-100"
+      className="space-y-8 text-white opacity-100 relative"
     >
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">Turn-Key Bundles</span>
-          <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
+      {/* Top Header & Glowing Badges */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 bg-slate-900/90 border border-slate-800 p-6 rounded-3xl backdrop-blur-xl shadow-2xl">
+        <div className="space-y-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-sm shadow-emerald-500/20">
+              <ShieldCheck className="w-3.5 h-3.5" /> Tier-1 Rated
+            </span>
+            <span className="px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-sm shadow-amber-500/20">
+              <Award className="w-3.5 h-3.5" /> Net Metering Certified
+            </span>
+            <span className="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-sm shadow-cyan-500/20">
+              <Sparkles className="w-3.5 h-3.5" /> NEPRA Approved
+            </span>
+          </div>
+
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white">
             Turn-Key Solar Packages & Tier-1 Panel Systems
           </h2>
+          <p className="text-xs sm:text-sm text-slate-300 font-medium max-w-2xl">
+            All packages include turn-key installation, DISCO green meter licensing, Tier-1 N-Type bifacial solar plates, and 25-year panel output guarantees.
+          </p>
         </div>
 
-        <span className="text-xs text-slate-300 font-medium">
-          All packages include turn-key installation, DISCO green meter, and 25-year panel warranties.
-        </span>
+        {onOpenComparisonModal && (
+          <button
+            onClick={onOpenComparisonModal}
+            className="py-3 px-5 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-400 to-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl shadow-emerald-500/20 transition-all hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap min-h-[48px]"
+          >
+            <Layers className="w-4 h-4" />
+            <span>Compare Specs Side-by-Side</span>
+          </button>
+        )}
       </div>
 
+      {/* Package Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {packages.map((pkg) => (
           <div
             key={pkg.id}
             className={`relative rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 ${
               pkg.popular
-                ? 'bg-slate-900 border-2 border-emerald-400 shadow-2xl shadow-emerald-500/10'
-                : 'bg-slate-900/80 border border-slate-800 hover:border-slate-700 shadow-xl'
+                ? 'bg-slate-900/95 border-2 border-emerald-400 shadow-2xl shadow-emerald-500/10 backdrop-blur-2xl'
+                : 'bg-slate-900/80 border border-slate-800 hover:border-slate-700 shadow-xl backdrop-blur-xl'
             }`}
           >
             {pkg.popular && (
-              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-emerald-500 text-slate-950 text-xs font-black tracking-wider uppercase shadow-md">
+              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-emerald-400 to-teal-400 text-slate-950 text-xs font-black tracking-wider uppercase shadow-lg shadow-emerald-500/30">
                 MOST POPULAR IN PAKISTAN
               </div>
             )}
@@ -126,7 +150,7 @@ export const SolarPackagesSection: React.FC<SolarPackagesSectionProps> = ({
                 <h3 className="text-xl font-black text-white">{pkg.title}</h3>
               </div>
 
-              <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-1">
+              <div className="bg-slate-950/90 p-4 rounded-2xl border border-slate-800 space-y-1">
                 <p className="text-xs text-slate-400 font-medium">Turn-Key Installed CAPEX</p>
                 <p className="text-2xl font-black text-emerald-400">
                   Rs. {pkg.pricePkr.toLocaleString()} <span className="text-xs text-slate-400 font-bold">PKR</span>
@@ -150,7 +174,7 @@ export const SolarPackagesSection: React.FC<SolarPackagesSectionProps> = ({
             <div className="pt-6 mt-6 border-t border-slate-800 space-y-2.5">
               <button
                 onClick={() => onOpenCheckoutModal(pkg)}
-                className="w-full py-3 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-transform active:scale-98 cursor-pointer min-h-[44px]"
+                className="w-full py-3 px-4 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-transform active:scale-98 cursor-pointer min-h-[44px]"
               >
                 <CreditCard className="w-4 h-4" />
                 <span>Book System (Easypaisa/Bank)</span>
@@ -179,6 +203,4 @@ export const SolarPackagesSection: React.FC<SolarPackagesSectionProps> = ({
       </div>
     </section>
   );
-
 };
-
