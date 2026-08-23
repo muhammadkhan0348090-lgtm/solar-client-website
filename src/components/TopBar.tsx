@@ -1,6 +1,30 @@
-import React, { useState } from 'react';
-import { Search, Camera, Mic, ChevronDown, Check, Sun, Sparkles, X, Tag, Phone, Mail, FileText, User, ShieldCheck, LogOut, Package, Menu } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Search, Camera, Mic, ChevronDown, Check, Sun, Sparkles, X, Tag, Phone, Mail, FileText, User, ShieldCheck, LogOut, Package, Menu, ArrowRight, Zap, Calculator, Layers, Award } from 'lucide-react';
 import { generateQuotationPDF } from '../utils/pdfGenerator';
+
+export interface SearchSuggestionItem {
+  id: string;
+  title: string;
+  category: 'Packages & Inverters' | 'Tools & Quick Links';
+  badge: 'Package' | 'Inverter' | 'Panel' | 'Tool' | 'PDF' | 'License';
+  actionType: 'scroll' | 'modal' | 'pdf';
+  target: string;
+}
+
+const predefinedSuggestions: SearchSuggestionItem[] = [
+  // Packages & Inverters
+  { id: 'ps-1', title: '5kW Hybrid System', category: 'Packages & Inverters', badge: 'Package', actionType: 'scroll', target: 'turnkey-packages-container' },
+  { id: 'ps-2', title: '10kW On-Grid Setup', category: 'Packages & Inverters', badge: 'Package', actionType: 'scroll', target: 'turnkey-packages-container' },
+  { id: 'ps-3', title: 'Nitrox 8kW Inverter', category: 'Packages & Inverters', badge: 'Inverter', actionType: 'scroll', target: 'turnkey-packages-container' },
+  { id: 'ps-4', title: 'Longi 585W Bifacial Solar Panels', category: 'Packages & Inverters', badge: 'Panel', actionType: 'scroll', target: 'spec-showcase-section' },
+  { id: 'ps-5', title: 'Inverex Solar Inverter Prices', category: 'Packages & Inverters', badge: 'Inverter', actionType: 'modal', target: 'pakistan-rates' },
+  
+  // Tools & Quick Links
+  { id: 'ts-1', title: 'Calculate Monthly Bill Savings', category: 'Tools & Quick Links', badge: 'Tool', actionType: 'scroll', target: 'net-metering-simulator-container' },
+  { id: 'ts-2', title: 'Net Metering Approval Process', category: 'Tools & Quick Links', badge: 'License', actionType: 'scroll', target: 'net-metering-simulator-container' },
+  { id: 'ts-3', title: 'Download Quotation PDF', category: 'Tools & Quick Links', badge: 'PDF', actionType: 'pdf', target: 'pdf' },
+  { id: 'ts-4', title: 'Book Free Site Inspection', category: 'Tools & Quick Links', badge: 'Tool', actionType: 'modal', target: 'quotation-modal' },
+];
 
 interface TopBarProps {
   searchQuery: string;
@@ -34,6 +58,50 @@ export const TopBar: React.FC<TopBarProps> = ({
   onToggleMobileMenu,
 }) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+        setIsSearchFocused(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Real-time filtered suggestions based on user input
+  const filteredSuggestions = predefinedSuggestions.filter((item) => {
+    if (!searchQuery.trim()) return true;
+    const q = searchQuery.toLowerCase();
+    return item.title.toLowerCase().includes(q) || item.category.toLowerCase().includes(q) || item.badge.toLowerCase().includes(q);
+  });
+
+  const handleSelectSuggestion = (item: SearchSuggestionItem) => {
+    setSearchQuery(item.title);
+    setIsSearchFocused(false);
+
+    if (item.actionType === 'scroll') {
+      const el = document.getElementById(item.target);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    } else if (item.actionType === 'modal') {
+      if (item.target === 'pakistan-rates') onOpenPakistanRates();
+      if (item.target === 'quotation-modal') onOpenQuotationModal();
+    } else if (item.actionType === 'pdf') {
+      generateQuotationPDF({
+        systemSizeKw: 10,
+        panelBrand: 'Longi 585W Tier-1',
+        totalCapexPkr: 1450000,
+        monthlySavingsPkr: 58000,
+        monthlyBillPkr: 65000,
+        paybackTimeline: '2.4 Years',
+      });
+    }
+  };
 
   return (
     <header
@@ -65,9 +133,8 @@ export const TopBar: React.FC<TopBarProps> = ({
         </div>
       </div>
 
-
-      {/* Main Search Input */}
-      <div className="flex-1 max-w-xl">
+      {/* Intelligent Autocomplete Search Bar Container */}
+      <div className="flex-1 max-w-xl relative" ref={searchContainerRef}>
         <div
           id="search-input-container"
           className={`flex items-center gap-2.5 px-4 py-2 bg-slate-900/90 hover:bg-slate-900 focus-within:bg-slate-950 focus-within:ring-2 focus-within:ring-amber-400/50 focus-within:border-amber-400 border border-slate-700/70 rounded-full transition-all duration-200 shadow-inner ${
@@ -79,16 +146,20 @@ export const TopBar: React.FC<TopBarProps> = ({
             id="global-search-input"
             type="text"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={isListening ? 'Listening for solar query...' : 'Search Longi 585W, Jinko, Lahore prices, Nitrox inverters...'}
-            className="w-full bg-transparent text-xs sm:text-sm text-white placeholder:text-slate-400 focus:outline-hidden font-medium"
+            onFocus={() => setIsSearchFocused(true)}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setIsSearchFocused(true);
+            }}
+            placeholder={isListening ? 'Listening for solar query...' : 'Search Longi 585W, 10kW Hybrid, Net Metering...'}
+            className="w-full bg-transparent text-xs sm:text-sm text-white placeholder:text-slate-400 focus:outline-none font-medium"
           />
 
           {searchQuery && (
             <button
               id="clear-search-btn"
               onClick={() => setSearchQuery('')}
-              className="text-slate-400 hover:text-white p-0.5 rounded-full"
+              className="text-slate-400 hover:text-white p-0.5 rounded-full cursor-pointer"
               title="Clear"
             >
               <X className="w-3.5 h-3.5" />
@@ -100,7 +171,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             id="camera-visual-search-btn"
             onClick={onVisualSearch}
             title="Search by solar blueprint image"
-            className="text-slate-400 hover:text-amber-400 p-1 rounded-full hover:bg-slate-800/80 transition-colors"
+            className="text-slate-400 hover:text-amber-400 p-1 rounded-full hover:bg-slate-800/80 transition-colors cursor-pointer"
           >
             <Camera className="w-4 h-4" />
           </button>
@@ -110,7 +181,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             id="mic-voice-search-btn"
             onClick={onVoiceSearch}
             title="Voice search"
-            className={`p-1 rounded-full transition-all ${
+            className={`p-1 rounded-full transition-all cursor-pointer ${
               isListening
                 ? 'text-red-400 bg-red-900/60 animate-pulse'
                 : 'text-slate-400 hover:text-amber-400 hover:bg-slate-800/80'
@@ -119,6 +190,55 @@ export const TopBar: React.FC<TopBarProps> = ({
             <Mic className="w-4 h-4" />
           </button>
         </div>
+
+        {/* Smart Glassmorphic Autocomplete Suggestions Dropdown */}
+        {isSearchFocused && (
+          <div className="absolute top-full left-0 right-0 mt-2 bg-slate-900/95 backdrop-blur-2xl border-2 border-slate-700/80 rounded-2xl shadow-2xl p-3 z-50 text-white space-y-3 max-h-96 overflow-y-auto custom-scrollbar animate-in fade-in zoom-in-95 duration-150">
+            
+            <div className="flex items-center justify-between border-b border-slate-800 pb-2 px-1">
+              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Intelligent Suggestions</span>
+              </span>
+              <span className="text-[10px] text-slate-400 font-semibold">
+                {filteredSuggestions.length} Results
+              </span>
+            </div>
+
+            {filteredSuggestions.length === 0 ? (
+              <div className="p-4 text-center text-xs text-slate-400">
+                No matching solar packages or tools found. Try searching for "5kW", "Longi", or "Net Metering".
+              </div>
+            ) : (
+              <div className="space-y-1.5">
+                {filteredSuggestions.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => handleSelectSuggestion(item)}
+                    className="w-full p-2.5 rounded-xl bg-slate-950/60 hover:bg-emerald-500/15 border border-slate-800 hover:border-emerald-500/40 text-xs font-semibold text-slate-200 hover:text-emerald-300 flex items-center justify-between group transition-all cursor-pointer text-left"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <span
+                        className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md shrink-0 ${
+                          item.category === 'Packages & Inverters'
+                            ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                            : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                        }`}
+                      >
+                        {item.badge}
+                      </span>
+                      <span className="font-bold text-white group-hover:text-amber-300 transition-colors">
+                        {item.title}
+                      </span>
+                    </div>
+
+                    <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-amber-300 group-hover:translate-x-1 transition-transform shrink-0" />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Quick Actions & Auth Controls */}
@@ -132,7 +252,7 @@ export const TopBar: React.FC<TopBarProps> = ({
               totalCapexPkr: 1450000,
               monthlySavingsPkr: 58000,
               monthlyBillPkr: 65000,
-              paybackTimeline: '2.5 Years',
+              paybackTimeline: '2.4 Years',
             })
           }
           className="hidden lg:flex items-center gap-1.5 px-3 py-2 rounded-full bg-slate-900 border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-bold transition-all shadow-md min-h-[44px] cursor-pointer"
@@ -185,7 +305,6 @@ export const TopBar: React.FC<TopBarProps> = ({
             </button>
           )}
 
-
           {/* Profile Dropdown */}
           {showProfileMenu && currentUser && (
             <div
@@ -222,7 +341,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                     setShowProfileMenu(false);
                     onOpenUserOrdersModal();
                   }}
-                  className="w-full text-left px-4 py-2 hover:bg-emerald-500/10 text-emerald-300 font-bold flex items-center gap-2"
+                  className="w-full text-left px-4 py-2 hover:bg-emerald-500/10 text-emerald-300 font-bold flex items-center gap-2 cursor-pointer"
                 >
                   <Package className="w-4 h-4 text-emerald-400" />
                   My Orders & Payment Status
@@ -233,7 +352,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                     setShowProfileMenu(false);
                     onOpenAdminDashboard();
                   }}
-                  className="w-full text-left px-4 py-2 hover:bg-emerald-500/10 text-emerald-300 font-bold flex items-center gap-2"
+                  className="w-full text-left px-4 py-2 hover:bg-emerald-500/10 text-emerald-300 font-bold flex items-center gap-2 cursor-pointer"
                 >
                   <ShieldCheck className="w-4 h-4 text-emerald-400" />
                   Admin Dashboard (/admin)
@@ -244,7 +363,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                     setShowProfileMenu(false);
                     onOpenQuotationModal();
                   }}
-                  className="w-full text-left px-4 py-2 hover:bg-amber-500/10 text-amber-300 font-bold flex items-center gap-2"
+                  className="w-full text-left px-4 py-2 hover:bg-amber-500/10 text-amber-300 font-bold flex items-center gap-2 cursor-pointer"
                 >
                   <FileText className="w-4 h-4 text-amber-400" />
                   Request Free Solar Quotation
@@ -255,7 +374,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                     setShowProfileMenu(false);
                     onLogout();
                   }}
-                  className="w-full text-left px-4 py-2 hover:bg-red-500/10 text-red-400 font-bold flex items-center gap-2 border-t border-slate-800 mt-1"
+                  className="w-full text-left px-4 py-2 hover:bg-red-500/10 text-red-400 font-bold flex items-center gap-2 border-t border-slate-800 mt-1 cursor-pointer"
                 >
                   <LogOut className="w-4 h-4 text-red-400" />
                   Log Out
