@@ -51,6 +51,7 @@ interface TopBarProps {
   onOpenAuthModal: () => void;
   onOpenAdminDashboard: () => void;
   onOpenUserOrdersModal: () => void;
+  onOpenSiteSurveyModal?: () => void;
   currentUser: any;
   onLogout: () => void;
   isListening?: boolean;
@@ -68,6 +69,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   onOpenAuthModal,
   onOpenAdminDashboard,
   onOpenUserOrdersModal,
+  onOpenSiteSurveyModal,
   currentUser,
   onLogout,
   isListening = false,
@@ -281,6 +283,18 @@ export const TopBar: React.FC<TopBarProps> = ({
           <FileText className="w-3.5 h-3.5 text-amber-400" />
           <span>PDF Quote</span>
         </button>
+
+        {/* Free Site Survey CTA Button */}
+        {onOpenSiteSurveyModal && (
+          <button
+            onClick={onOpenSiteSurveyModal}
+            className="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black shadow-lg transition-all active:scale-95 shrink-0 min-h-[44px] cursor-pointer"
+            title="Book free rooftop drone survey"
+          >
+            <Sun className="w-3.5 h-3.5 fill-current" />
+            <span>Free Survey</span>
+          </button>
+        )}
 
         {/* Get Free Quote CTA Button */}
         <button

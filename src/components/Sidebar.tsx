@@ -157,6 +157,7 @@ interface MobileDrawerProps {
   onOpenQuotationModal: () => void;
   onOpenAdminDashboard: () => void;
   onOpenUserOrdersModal: () => void;
+  onOpenSiteSurveyModal?: () => void;
   currentUser: any;
 }
 
@@ -172,6 +173,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
   onOpenQuotationModal,
   onOpenAdminDashboard,
   onOpenUserOrdersModal,
+  onOpenSiteSurveyModal,
   currentUser,
 }) => {
   if (!isOpen) return null;
@@ -306,6 +308,19 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
               <FileText className="w-4 h-4 shrink-0" />
               <span>Get Free Quotation</span>
             </button>
+
+            {onOpenSiteSurveyModal && (
+              <button
+                onClick={() => {
+                  onClose();
+                  onOpenSiteSurveyModal();
+                }}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-400 to-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg transition-all min-h-[44px]"
+              >
+                <Sun className="w-4 h-4 shrink-0 fill-current" />
+                <span>Book Free Rooftop Survey</span>
+              </button>
+            )}
 
             <button
               onClick={() => {
