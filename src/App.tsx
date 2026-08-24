@@ -444,7 +444,12 @@ export default function App() {
 
         {/* 6. COMPLETED PROJECTS PORTFOLIO GALLERY */}
         <section id="completed-projects-container" className="relative z-20 p-4 sm:p-8 max-w-7xl mx-auto w-full pt-12">
-          <CompletedProjectsPortfolio />
+          <CompletedProjectsPortfolio
+            onSelectProjectImage={(img, title) => {
+              setLightboxImage(img);
+              setLightboxTitle(title);
+            }}
+          />
         </section>
 
         {/* 7. CLIENT TESTIMONIALS & GOOGLE RATINGS */}

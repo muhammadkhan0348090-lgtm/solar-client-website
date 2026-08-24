@@ -2,7 +2,13 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Zap, TrendingDown, CheckCircle2 } from 'lucide-react';
 
-export const CompletedProjectsPortfolio: React.FC = () => {
+interface CompletedProjectsPortfolioProps {
+  onSelectProjectImage?: (image: string, title: string) => void;
+}
+
+export const CompletedProjectsPortfolio: React.FC<CompletedProjectsPortfolioProps> = ({
+  onSelectProjectImage,
+}) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedCity, setSelectedCity] = useState<string>('all');
 
@@ -57,37 +63,36 @@ export const CompletedProjectsPortfolio: React.FC = () => {
     },
   ];
 
+  const [categoryFilter, setCategoryFilter] = useState<'all' | 'Residential' | 'Commercial' | 'Industrial'>('all');
+  const [cityFilter, setCityFilter] = useState<'all' | 'Lahore' | 'Islamabad' | 'Karachi' | 'Peshawar'>('all');
+
   const filtered = projects.filter((p) => {
-    const matchCat = selectedCategory === 'all' || p.category.toLowerCase() === selectedCategory.toLowerCase();
-    const matchCity = selectedCity === 'all' || p.city.toLowerCase() === selectedCity.toLowerCase();
-    return matchCat && matchCity;
+    const matchesCat = categoryFilter === 'all' || p.category === categoryFilter;
+    const matchesCity = cityFilter === 'all' || p.city === cityFilter;
+    return matchesCat && matchesCity;
   });
 
   return (
-    <section
-      id="completed-projects-portfolio"
-      className="space-y-6 text-white opacity-100"
-    >
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <section id="completed-projects-portfolio" className="space-y-6 text-white my-10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
         <div>
-          <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">Proven Track Record</span>
-          <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
-            Completed Solar Projects Portfolio Across Pakistan
+          <span className="text-xs font-black uppercase tracking-widest text-emerald-400">Verified Field Installations</span>
+          <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white mt-0.5">
+            Completed Projects & Client Success Portfolio
           </h2>
         </div>
 
-        {/* Filter Controls Bar */}
+        {/* Dual Category & City Filter Bars */}
         <div className="flex flex-col gap-2">
-          {/* Category Filter Bar */}
-          <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-0.5">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1">Sector:</span>
-            {['all', 'Residential', 'Commercial', 'Industrial'].map((cat) => (
+          {/* Category Filter */}
+          <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-1">
+            {(['all', 'Residential', 'Commercial', 'Industrial'] as const).map((cat) => (
               <button
                 key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer min-h-[36px] ${
-                  selectedCategory === cat
-                    ? 'bg-amber-400 text-slate-950 shadow-md'
+                onClick={() => setCategoryFilter(cat)}
+                className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer whitespace-nowrap min-h-[36px] ${
+                  categoryFilter === cat
+                    ? 'bg-amber-500 text-slate-950 shadow-md font-black'
                     : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
                 }`}
               >
@@ -96,16 +101,15 @@ export const CompletedProjectsPortfolio: React.FC = () => {
             ))}
           </div>
 
-          {/* City Filter Chips */}
-          <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-0.5">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1">City:</span>
-            {['all', 'Lahore', 'Islamabad', 'Karachi', 'Peshawar'].map((city) => (
+          {/* City Filter */}
+          <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-1">
+            {(['all', 'Lahore', 'Islamabad', 'Karachi', 'Peshawar'] as const).map((city) => (
               <button
                 key={city}
-                onClick={() => setSelectedCity(city)}
-                className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer min-h-[36px] ${
-                  selectedCity === city
-                    ? 'bg-emerald-500 text-slate-950 shadow-md'
+                onClick={() => setCityFilter(city)}
+                className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer whitespace-nowrap min-h-[36px] ${
+                  cityFilter === city
+                    ? 'bg-emerald-500 text-slate-950 shadow-md font-black'
                     : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
                 }`}
               >
@@ -120,7 +124,8 @@ export const CompletedProjectsPortfolio: React.FC = () => {
         {filtered.map((proj) => (
           <div
             key={proj.id}
-            className="theme-card rounded-3xl overflow-hidden bg-slate-900/90 border border-slate-800 hover:border-emerald-500/50 shadow-xl transition-all duration-300 w-[84vw] sm:w-auto shrink-0 snap-center"
+            onClick={() => onSelectProjectImage && onSelectProjectImage(proj.image, `${proj.title} - ${proj.city}`)}
+            className="theme-card rounded-3xl overflow-hidden bg-slate-900/90 border border-slate-800 hover:border-emerald-500/50 shadow-xl transition-all duration-300 w-[84vw] sm:w-auto shrink-0 snap-center cursor-pointer group"
           >
             <div className="relative h-48 overflow-hidden">
               <img
