@@ -106,7 +106,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/90 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-[95vw] sm:w-[90vw] md:w-full max-w-2xl bg-slate-900 border border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden text-white flex flex-col max-h-[90vh]">
+      <div className="relative w-[95vw] sm:w-[90vw] md:w-full max-w-2xl theme-card border rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
         <div className="bg-gradient-to-r from-amber-950 via-slate-900 to-slate-950 p-4 sm:p-6 border-b border-slate-800 relative flex items-center justify-between gap-2">
           <div>

@@ -64,7 +64,7 @@ export const QuotationModal: React.FC<QuotationModalProps> = ({ isOpen, onClose 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-[95vw] sm:w-[90vw] md:w-full max-w-lg bg-slate-900 border border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden text-white max-h-[90vh] flex flex-col">
+      <div className="relative w-[95vw] sm:w-[90vw] md:w-full max-w-lg theme-card border rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
         {/* Modal Header */}
         <div className="bg-gradient-to-r from-emerald-950 to-slate-900 p-4 sm:p-6 border-b border-slate-800 relative">
           <button

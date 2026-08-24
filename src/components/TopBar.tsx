@@ -123,7 +123,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   return (
     <header
       id="main-topbar"
-      className="sticky top-0 z-30 bg-slate-950/85 backdrop-blur-2xl px-3 sm:px-6 py-2.5 sm:py-3 border-b border-slate-800/80 flex items-center justify-between gap-2 sm:gap-4 shadow-xl"
+      className="sticky top-0 z-30 theme-card backdrop-blur-2xl px-3 sm:px-6 py-2.5 sm:py-3 border-b flex items-center justify-between gap-2 sm:gap-4 shadow-xl"
     >
       {/* Mobile Drawer Hamburger & Brand Identity */}
       <div className="flex items-center gap-2">

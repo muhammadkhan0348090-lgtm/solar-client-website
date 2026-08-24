@@ -70,7 +70,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <aside
       id="main-sidebar"
-      className="hidden md:flex fixed left-0 top-0 bottom-0 w-16 md:w-20 bg-slate-950/90 backdrop-blur-2xl border-r border-amber-500/20 flex-col items-center justify-between py-5 z-40 shadow-2xl shadow-amber-500/5 select-none"
+      className="hidden md:flex fixed left-0 top-0 bottom-0 w-16 md:w-20 theme-card border-r flex-col items-center justify-between py-5 z-40 shadow-2xl select-none"
     >
       {/* Top Logo / Brand */}
       <div className="flex flex-col items-center gap-6 w-full">

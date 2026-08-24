@@ -182,7 +182,7 @@ export const PakistanRoiCalculator: React.FC<PakistanRoiCalculatorProps> = ({
     >
 
       {/* Header & Badges */}
-      <div className="bg-emerald-950/90 backdrop-blur-2xl p-5 sm:p-6 rounded-3xl relative overflow-hidden shadow-2xl border border-emerald-500/40">
+      <div className="theme-card backdrop-blur-2xl p-5 sm:p-6 rounded-3xl relative overflow-hidden shadow-2xl border">
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1.5">

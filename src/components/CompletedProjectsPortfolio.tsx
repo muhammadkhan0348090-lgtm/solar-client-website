@@ -120,7 +120,7 @@ export const CompletedProjectsPortfolio: React.FC = () => {
         {filtered.map((proj) => (
           <div
             key={proj.id}
-            className="group rounded-3xl overflow-hidden bg-slate-900/90 border border-slate-800 hover:border-emerald-500/50 shadow-xl transition-all duration-300 w-[84vw] sm:w-auto shrink-0 snap-center"
+            className="theme-card rounded-3xl overflow-hidden bg-slate-900/90 border border-slate-800 hover:border-emerald-500/50 shadow-xl transition-all duration-300 w-[84vw] sm:w-auto shrink-0 snap-center"
           >
             <div className="relative h-48 overflow-hidden">
               <img

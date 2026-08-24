@@ -1,38 +1,38 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-export type SolarThemeClass = 'theme-solar-gold' | 'theme-cyber-emerald' | 'theme-deep-ocean' | 'theme-modern-light';
+export type SolarTheme = 'solar-gold' | 'cyber-emerald' | 'deep-ocean' | 'modern-light';
 
 interface ThemeContextType {
-  themeClass: SolarThemeClass;
-  setThemeClass: (theme: SolarThemeClass) => void;
+  theme: SolarTheme;
+  setTheme: (theme: SolarTheme) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  themeClass: 'theme-solar-gold',
-  setThemeClass: () => {},
+  theme: 'solar-gold',
+  setTheme: () => {},
 });
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [themeClass, setThemeClassState] = useState<SolarThemeClass>(() => {
-    const saved = localStorage.getItem('app-theme') as SolarThemeClass;
-    if (saved && ['theme-solar-gold', 'theme-cyber-emerald', 'theme-deep-ocean', 'theme-modern-light'].includes(saved)) {
+  const [theme, setThemeState] = useState<SolarTheme>(() => {
+    const saved = localStorage.getItem('solar_theme') as SolarTheme;
+    if (saved && ['solar-gold', 'cyber-emerald', 'deep-ocean', 'modern-light'].includes(saved)) {
       return saved;
     }
-    return 'theme-solar-gold';
+    return 'solar-gold';
   });
 
-  const setThemeClass = (newTheme: SolarThemeClass) => {
-    setThemeClassState(newTheme);
-    localStorage.setItem('app-theme', newTheme);
+  const setTheme = (newTheme: SolarTheme) => {
+    setThemeState(newTheme);
+    localStorage.setItem('solar_theme', newTheme);
   };
 
   useEffect(() => {
-    // Apply class directly to html (document.documentElement)
-    document.documentElement.className = themeClass;
-  }, [themeClass]);
+    // Inject data-theme directly on documentElement
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
 
   return (
-    <ThemeContext.Provider value={{ themeClass, setThemeClass }}>
+    <ThemeContext.Provider value={{ theme, setTheme }}>
       {children}
     </ThemeContext.Provider>
   );

@@ -94,7 +94,7 @@ export const SolarPackagesSection: React.FC<SolarPackagesSectionProps> = ({
       className="space-y-8 text-white opacity-100 relative"
     >
       {/* Top Header & Glowing Badges */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 bg-slate-900/90 border border-slate-800 p-6 rounded-3xl backdrop-blur-xl shadow-2xl">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 theme-card border p-6 rounded-3xl backdrop-blur-xl shadow-2xl">
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-2">
             <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-sm shadow-emerald-500/20">
@@ -108,10 +108,10 @@ export const SolarPackagesSection: React.FC<SolarPackagesSectionProps> = ({
             </span>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight">
             Turn-Key Solar Packages & Tier-1 Panel Systems
           </h2>
-          <p className="text-xs sm:text-sm text-slate-300 font-medium max-w-2xl">
+          <p className="text-xs sm:text-sm font-medium max-w-2xl opacity-90">
             All packages include turn-key installation, DISCO green meter licensing, Tier-1 N-Type bifacial solar plates, and 25-year panel output guarantees.
           </p>
         </div>
@@ -132,10 +132,10 @@ export const SolarPackagesSection: React.FC<SolarPackagesSectionProps> = ({
         {packages.map((pkg) => (
           <div
             key={pkg.id}
-            className={`relative rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 ${
+            className={`relative rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 theme-card border ${
               pkg.popular
-                ? 'bg-slate-900/95 border-2 border-emerald-400 shadow-2xl shadow-emerald-500/10 backdrop-blur-2xl'
-                : 'bg-slate-900/80 border border-slate-800 hover:border-slate-700 shadow-xl backdrop-blur-xl'
+                ? 'ring-2 ring-emerald-400 shadow-2xl shadow-emerald-500/10 backdrop-blur-2xl'
+                : 'shadow-xl backdrop-blur-xl'
             }`}
           >
             {pkg.popular && (

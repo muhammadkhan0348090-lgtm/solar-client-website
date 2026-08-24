@@ -101,7 +101,7 @@ export const CreatePinModal: React.FC<CreatePinModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-3xl w-[95vw] sm:w-[90vw] md:w-full max-w-lg max-h-[90vh] overflow-y-auto p-5 sm:p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200 scrollbar-thin scrollbar-thumb-gray-200"
+        className="theme-card border rounded-3xl w-[95vw] sm:w-[90vw] md:w-full max-w-lg max-h-[90vh] overflow-y-auto p-5 sm:p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between pb-3 border-b border-gray-100">
