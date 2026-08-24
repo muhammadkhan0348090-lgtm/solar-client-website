@@ -1,54 +1,38 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-export type SolarTheme = 'solar-gold' | 'cyber-emerald' | 'deep-ocean' | 'modern-light';
+export type SolarThemeClass = 'theme-solar-gold' | 'theme-cyber-emerald' | 'theme-deep-ocean' | 'theme-modern-light';
 
 interface ThemeContextType {
-  theme: SolarTheme;
-  setTheme: (theme: SolarTheme) => void;
+  themeClass: SolarThemeClass;
+  setThemeClass: (theme: SolarThemeClass) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  theme: 'solar-gold',
-  setTheme: () => {},
+  themeClass: 'theme-solar-gold',
+  setThemeClass: () => {},
 });
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setThemeState] = useState<SolarTheme>(() => {
-    const saved = localStorage.getItem('solar_theme') as SolarTheme;
-    if (saved && ['solar-gold', 'cyber-emerald', 'deep-ocean', 'modern-light'].includes(saved)) {
+  const [themeClass, setThemeClassState] = useState<SolarThemeClass>(() => {
+    const saved = localStorage.getItem('app-theme') as SolarThemeClass;
+    if (saved && ['theme-solar-gold', 'theme-cyber-emerald', 'theme-deep-ocean', 'theme-modern-light'].includes(saved)) {
       return saved;
     }
-    return 'solar-gold';
+    return 'theme-solar-gold';
   });
 
-  const setTheme = (newTheme: SolarTheme) => {
-    setThemeState(newTheme);
-    localStorage.setItem('solar_theme', newTheme);
+  const setThemeClass = (newTheme: SolarThemeClass) => {
+    setThemeClassState(newTheme);
+    localStorage.setItem('app-theme', newTheme);
   };
 
   useEffect(() => {
-    const root = document.documentElement;
-    root.setAttribute('data-theme', theme);
-    
-    if (theme === 'modern-light') {
-      root.classList.add('light-mode');
-      document.body.style.backgroundColor = '#f8fafc';
-      document.body.style.color = '#0f172a';
-    } else {
-      root.classList.remove('light-mode');
-      document.body.style.color = '#ffffff';
-      if (theme === 'cyber-emerald') {
-        document.body.style.backgroundColor = '#09090b';
-      } else if (theme === 'deep-ocean') {
-        document.body.style.backgroundColor = '#0b1329';
-      } else {
-        document.body.style.backgroundColor = '#020617';
-      }
-    }
-  }, [theme]);
+    // Apply class directly to html (document.documentElement)
+    document.documentElement.className = themeClass;
+  }, [themeClass]);
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
+    <ThemeContext.Provider value={{ themeClass, setThemeClass }}>
       {children}
     </ThemeContext.Provider>
   );
