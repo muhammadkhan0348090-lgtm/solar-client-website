@@ -257,6 +257,7 @@ export default function App() {
           onVoiceSearch={handleVoiceSearch}
           onOpenPakistanRates={() => setShowPakistanRatesModal(true)}
           onOpenQuotationModal={() => setShowQuotationModal(true)}
+          onOpenPackageComparisonModal={() => setShowPackageComparisonModal(true)}
           onOpenAuthModal={() => setShowAuthModal(true)}
           onOpenAdminDashboard={() => setShowAdminDashboard(true)}
           onOpenUserOrdersModal={() => setShowUserOrdersModal(true)}

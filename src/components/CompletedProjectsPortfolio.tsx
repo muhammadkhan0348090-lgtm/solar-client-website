@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { MapPin, Zap, TrendingDown, CheckCircle2 } from 'lucide-react';
 
 export const CompletedProjectsPortfolio: React.FC = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedCity, setSelectedCity] = useState<string>('all');
 
   const projects = [
@@ -10,6 +11,7 @@ export const CompletedProjectsPortfolio: React.FC = () => {
       id: 'proj-1',
       title: '15kW Rooftop Solar Installation - DHA Phase 6',
       city: 'Lahore',
+      category: 'Residential',
       capacityKw: '15 kW',
       beforeBill: 'Rs. 95,000 / mo',
       afterBill: 'Rs. 4,500 / mo',
@@ -21,6 +23,7 @@ export const CompletedProjectsPortfolio: React.FC = () => {
       id: 'proj-2',
       title: '10kW Hybrid Battery System - F-7/2 Sector',
       city: 'Islamabad',
+      category: 'Residential',
       capacityKw: '10 kW Hybrid',
       beforeBill: 'Rs. 62,000 / mo',
       afterBill: 'Rs. 2,100 / mo',
@@ -30,8 +33,9 @@ export const CompletedProjectsPortfolio: React.FC = () => {
     },
     {
       id: 'proj-3',
-      title: '25kW Commercial Factory Setup - SITE Area',
+      title: '25kW Commercial Plaza Setup - SITE Area',
       city: 'Karachi',
+      category: 'Commercial',
       capacityKw: '25 kW Three-Phase',
       beforeBill: 'Rs. 185,000 / mo',
       afterBill: 'Rs. 12,000 / mo',
@@ -41,18 +45,23 @@ export const CompletedProjectsPortfolio: React.FC = () => {
     },
     {
       id: 'proj-4',
-      title: '12kW Hybrid Backup Solar - University Town',
+      title: '50kW Industrial Factory Plant - Industrial Estate',
       city: 'Peshawar',
-      capacityKw: '12 kW Hybrid',
-      beforeBill: 'Rs. 78,000 / mo',
-      afterBill: 'Rs. 3,200 / mo',
+      category: 'Industrial',
+      capacityKw: '50 kW Heavy Duty',
+      beforeBill: 'Rs. 340,000 / mo',
+      afterBill: 'Rs. 18,000 / mo',
       savings: '95% Savings',
       image: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&w=800&q=80',
       panels: 'JA Solar 580W',
     },
   ];
 
-  const filtered = selectedCity === 'all' ? projects : projects.filter((p) => p.city.toLowerCase() === selectedCity.toLowerCase());
+  const filtered = projects.filter((p) => {
+    const matchCat = selectedCategory === 'all' || p.category.toLowerCase() === selectedCategory.toLowerCase();
+    const matchCity = selectedCity === 'all' || p.city.toLowerCase() === selectedCity.toLowerCase();
+    return matchCat && matchCity;
+  });
 
   return (
     <section
@@ -67,21 +76,43 @@ export const CompletedProjectsPortfolio: React.FC = () => {
           </h2>
         </div>
 
-        {/* City Filter Chips */}
-        <div className="flex items-center gap-2 overflow-x-auto scrollbar-none py-1">
-          {['all', 'Lahore', 'Islamabad', 'Karachi', 'Peshawar'].map((city) => (
-            <button
-              key={city}
-              onClick={() => setSelectedCity(city)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                selectedCity === city
-                  ? 'bg-emerald-500 text-slate-950 shadow-md'
-                  : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
-              }`}
-            >
-              {city === 'all' ? 'All Cities' : city}
-            </button>
-          ))}
+        {/* Filter Controls Bar */}
+        <div className="flex flex-col gap-2">
+          {/* Category Filter Bar */}
+          <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-0.5">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1">Sector:</span>
+            {['all', 'Residential', 'Commercial', 'Industrial'].map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer min-h-[36px] ${
+                  selectedCategory === cat
+                    ? 'bg-amber-400 text-slate-950 shadow-md'
+                    : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
+                }`}
+              >
+                {cat === 'all' ? 'All Sectors' : cat}
+              </button>
+            ))}
+          </div>
+
+          {/* City Filter Chips */}
+          <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-0.5">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1">City:</span>
+            {['all', 'Lahore', 'Islamabad', 'Karachi', 'Peshawar'].map((city) => (
+              <button
+                key={city}
+                onClick={() => setSelectedCity(city)}
+                className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer min-h-[36px] ${
+                  selectedCity === city
+                    ? 'bg-emerald-500 text-slate-950 shadow-md'
+                    : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
+                }`}
+              >
+                {city === 'all' ? 'All Cities' : city}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -107,6 +138,13 @@ export const CompletedProjectsPortfolio: React.FC = () => {
             </div>
 
             <div className="p-5 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">
+                  {proj.category}
+                </span>
+                <span className="text-amber-400 text-xs font-bold">{proj.savings}</span>
+              </div>
+
               <h3 className="text-sm font-bold text-white leading-snug line-clamp-2">{proj.title}</h3>
 
               <div className="bg-slate-950 p-3 rounded-2xl border border-slate-800 text-xs space-y-1.5">
@@ -120,9 +158,11 @@ export const CompletedProjectsPortfolio: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between text-[11px] text-slate-400">
+              <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1">
                 <span>Panels: {proj.panels}</span>
-                <span className="text-amber-400 font-bold">{proj.savings}</span>
+                <span className="text-emerald-400 font-semibold flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3 text-emerald-400" /> Operational
+                </span>
               </div>
             </div>
           </div>
@@ -131,6 +171,5 @@ export const CompletedProjectsPortfolio: React.FC = () => {
 
     </section>
   );
-
 };
 

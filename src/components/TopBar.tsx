@@ -5,25 +5,38 @@ import { generateQuotationPDF } from '../utils/pdfGenerator';
 export interface SearchSuggestionItem {
   id: string;
   title: string;
-  category: 'Packages & Inverters' | 'Tools & Quick Links';
-  badge: 'Package' | 'Inverter' | 'Panel' | 'Tool' | 'PDF' | 'License';
+  category: 'Packages & Inverters' | 'Tools & Quick Links' | 'Solar Equipment' | 'Projects & Portfolio';
+  badge: 'Package' | 'Inverter' | 'Panel' | 'Tool' | 'PDF' | 'License' | 'Portfolio';
   actionType: 'scroll' | 'modal' | 'pdf';
   target: string;
 }
 
 const predefinedSuggestions: SearchSuggestionItem[] = [
   // Packages & Inverters
-  { id: 'ps-1', title: '5kW Hybrid System', category: 'Packages & Inverters', badge: 'Package', actionType: 'scroll', target: 'turnkey-packages-container' },
-  { id: 'ps-2', title: '10kW On-Grid Setup', category: 'Packages & Inverters', badge: 'Package', actionType: 'scroll', target: 'turnkey-packages-container' },
-  { id: 'ps-3', title: 'Nitrox 8kW Inverter', category: 'Packages & Inverters', badge: 'Inverter', actionType: 'scroll', target: 'turnkey-packages-container' },
-  { id: 'ps-4', title: 'Longi 585W Bifacial Solar Panels', category: 'Packages & Inverters', badge: 'Panel', actionType: 'scroll', target: 'spec-showcase-section' },
-  { id: 'ps-5', title: 'Inverex Solar Inverter Prices', category: 'Packages & Inverters', badge: 'Inverter', actionType: 'modal', target: 'pakistan-rates' },
-  
+  { id: 'ps-1', title: '5kW Residential Starter Package', category: 'Packages & Inverters', badge: 'Package', actionType: 'scroll', target: 'turnkey-packages-container' },
+  { id: 'ps-2', title: '10kW Hybrid Family System', category: 'Packages & Inverters', badge: 'Package', actionType: 'scroll', target: 'turnkey-packages-container' },
+  { id: 'ps-3', title: '20kW Commercial Pro System', category: 'Packages & Inverters', badge: 'Package', actionType: 'scroll', target: 'turnkey-packages-container' },
+  { id: 'ps-4', title: 'Nitrox / Inverex 10kW Inverter', category: 'Packages & Inverters', badge: 'Inverter', actionType: 'scroll', target: 'turnkey-packages-container' },
+  { id: 'ps-5', title: 'Knox & Growatt Hybrid Inverters', category: 'Packages & Inverters', badge: 'Inverter', actionType: 'modal', target: 'pakistan-rates' },
+
+  // Solar Equipment
+  { id: 'eq-1', title: 'Longi 585W N-Type Bifacial Panels', category: 'Solar Equipment', badge: 'Panel', actionType: 'scroll', target: 'spec-showcase-section' },
+  { id: 'eq-2', title: 'Jinko 585W Tiger Neo Panels', category: 'Solar Equipment', badge: 'Panel', actionType: 'scroll', target: 'spec-showcase-section' },
+  { id: 'eq-3', title: 'Canadian Solar 600W HiKu7', category: 'Solar Equipment', badge: 'Panel', actionType: 'scroll', target: 'projects-gallery-section' },
+  { id: 'eq-4', title: '10.2kWh LiFePO4 Lithium Battery', category: 'Solar Equipment', badge: 'Tool', actionType: 'scroll', target: 'turnkey-packages-container' },
+
   // Tools & Quick Links
   { id: 'ts-1', title: 'Calculate Monthly Bill Savings', category: 'Tools & Quick Links', badge: 'Tool', actionType: 'scroll', target: 'net-metering-simulator-container' },
-  { id: 'ts-2', title: 'Net Metering Approval Process', category: 'Tools & Quick Links', badge: 'License', actionType: 'scroll', target: 'net-metering-simulator-container' },
-  { id: 'ts-3', title: 'Download Quotation PDF', category: 'Tools & Quick Links', badge: 'PDF', actionType: 'pdf', target: 'pdf' },
-  { id: 'ts-4', title: 'Book Free Site Inspection', category: 'Tools & Quick Links', badge: 'Tool', actionType: 'modal', target: 'quotation-modal' },
+  { id: 'ts-2', title: 'Net Metering License Approval', category: 'Tools & Quick Links', badge: 'License', actionType: 'scroll', target: 'net-metering-simulator-container' },
+  { id: 'ts-3', title: 'AI Roof Solar & Load Sizer', category: 'Tools & Quick Links', badge: 'Tool', actionType: 'scroll', target: 'ai-roof-sizer-container' },
+  { id: 'ts-4', title: 'Pakistan Live Solar Price Sheet (PKR)', category: 'Tools & Quick Links', badge: 'Tool', actionType: 'modal', target: 'pakistan-rates' },
+  { id: 'ts-5', title: 'Compare All Packages Side-by-Side', category: 'Tools & Quick Links', badge: 'Package', actionType: 'modal', target: 'package-comparison' },
+  { id: 'ts-6', title: 'Download Official System PDF Quote', category: 'Tools & Quick Links', badge: 'PDF', actionType: 'pdf', target: 'pdf' },
+  { id: 'ts-7', title: 'Book Free Site Inspection', category: 'Tools & Quick Links', badge: 'Tool', actionType: 'modal', target: 'quotation-modal' },
+
+  // Projects & Portfolio
+  { id: 'pj-1', title: 'Completed Projects Portfolio (Lahore/KHI/ISB)', category: 'Projects & Portfolio', badge: 'Portfolio', actionType: 'scroll', target: 'completed-projects-container' },
+  { id: 'pj-2', title: 'Frequently Asked Questions & Guide', category: 'Projects & Portfolio', badge: 'Portfolio', actionType: 'scroll', target: 'faq-section-container' },
 ];
 
 interface TopBarProps {
@@ -33,6 +46,7 @@ interface TopBarProps {
   onVoiceSearch: () => void;
   onOpenPakistanRates: () => void;
   onOpenQuotationModal: () => void;
+  onOpenPackageComparisonModal?: () => void;
   onOpenAuthModal: () => void;
   onOpenAdminDashboard: () => void;
   onOpenUserOrdersModal: () => void;
@@ -49,6 +63,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   onVoiceSearch,
   onOpenPakistanRates,
   onOpenQuotationModal,
+  onOpenPackageComparisonModal,
   onOpenAuthModal,
   onOpenAdminDashboard,
   onOpenUserOrdersModal,
@@ -91,6 +106,7 @@ export const TopBar: React.FC<TopBarProps> = ({
     } else if (item.actionType === 'modal') {
       if (item.target === 'pakistan-rates') onOpenPakistanRates();
       if (item.target === 'quotation-modal') onOpenQuotationModal();
+      if (item.target === 'package-comparison' && onOpenPackageComparisonModal) onOpenPackageComparisonModal();
     } else if (item.actionType === 'pdf') {
       generateQuotationPDF({
         systemSizeKw: 10,
