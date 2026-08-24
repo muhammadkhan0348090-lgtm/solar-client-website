@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, CreditCard, Building2, Copy, CheckCircle2, ShieldCheck, Upload, ArrowRight, Loader2, DollarSign, FileText } from 'lucide-react';
+import { apiPost, showToast } from '../utils/api';
 
 interface PackageItem {
   title: string;
@@ -54,6 +55,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const handleCopy = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
     setCopiedField(label);
+    showToast('Account details copied to clipboard!', 'info');
     setTimeout(() => setCopiedField(null), 2000);
   };
 
@@ -79,37 +81,27 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       return;
     }
 
-    try {
-      const response = await fetch('/api/orders/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: currentUser ? currentUser.id : null,
-          packageName: selectedPackage.title,
-          totalAmount,
-          advancePayment,
-          paymentMethod: paymentMethod === 'easypaisa' ? easypaisaDetails.method : bankDetails.method,
-          transactionId: transactionId.trim(),
-          receiptImage,
-          customerName: customerName.trim(),
-          customerPhone: customerPhone.trim(),
-          deliveryAddress: deliveryAddress.trim(),
-        }),
-      });
+    const res = await apiPost('/api/orders/checkout', {
+      userId: currentUser ? currentUser.id : null,
+      packageName: selectedPackage.title,
+      totalAmount,
+      advancePayment,
+      paymentMethod: paymentMethod === 'easypaisa' ? easypaisaDetails.method : bankDetails.method,
+      transactionId: transactionId.trim(),
+      receiptImage,
+      customerName: customerName.trim(),
+      customerPhone: customerPhone.trim(),
+      deliveryAddress: deliveryAddress.trim(),
+    });
 
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        setSuccessData({ invoiceRef: data.invoiceRef, orderId: data.orderId });
-      } else {
-        setErrorMessage(data.message || 'Checkout failed. Please try again.');
-      }
-    } catch (err) {
-      console.error('Checkout error:', err);
-      setErrorMessage('Network error while processing checkout order.');
-    } finally {
-      setIsLoading(false);
+    if (res.success && res.invoiceRef) {
+      setSuccessData({ invoiceRef: res.invoiceRef, orderId: res.orderId || Date.now() });
+      showToast(`Order payment receipt submitted! Invoice #${res.invoiceRef}`, 'success');
+    } else {
+      setErrorMessage(res.message || 'Checkout failed. Please try again.');
+      showToast(res.message || 'Checkout failed', 'error');
     }
+    setIsLoading(false);
   };
 
   return (

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Lock, Mail, User, ShieldCheck, ArrowRight, Sun, Loader2, AlertCircle } from 'lucide-react';
+import { showToast, API_BASE_URL } from '../utils/api';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -26,7 +27,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
     const payload = activeTab === 'register' ? { name, email, password } : { email, password };
 
     try {
-      const response = await fetch(endpoint, {
+      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -35,21 +36,24 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
       const data = await response.json();
 
       if (response.ok && data.success && data.token && data.user) {
-        // Strict success: Only store token & user on 200/201 OK response
         localStorage.setItem('solar_token', data.token);
         localStorage.setItem('solar_user', JSON.stringify(data.user));
         onSuccessAuth(data.user, data.token);
+        showToast(activeTab === 'login' ? `Welcome back, ${data.user.name}!` : 'Account registered successfully!', 'success');
         onClose();
         setName('');
         setEmail('');
         setPassword('');
       } else {
-        // Strict failure handling: Display red error message and block login
-        setErrorMessage(data.message || (activeTab === 'login' ? 'Invalid email or password' : 'Registration failed'));
+        const msg = data.message || (activeTab === 'login' ? 'Invalid email or password' : 'Registration failed');
+        setErrorMessage(msg);
+        showToast(msg, 'error');
       }
     } catch (err) {
       console.error('Auth API Network Error:', err);
-      setErrorMessage(activeTab === 'login' ? 'Invalid email or password' : 'Could not connect to authentication server');
+      const msg = activeTab === 'login' ? 'Invalid email or password' : 'Could not connect to authentication server';
+      setErrorMessage(msg);
+      showToast(msg, 'error');
     } finally {
       setIsLoading(false);
     }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Send, Phone, Mail, MapPin, CheckCircle2, Loader2, Sun, Sparkles } from 'lucide-react';
+import { apiPost, showToast } from '../utils/api';
 
 interface QuotationModalProps {
   isOpen: boolean;
@@ -38,44 +39,27 @@ export const QuotationModal: React.FC<QuotationModalProps> = ({ isOpen, onClose 
     setIsSubmitting(true);
     setErrorMessage('');
 
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+    const res = await apiPost('/api/contact', formData);
 
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        setSubmitSuccess(true);
-        setTimeout(() => {
-          setSubmitSuccess(false);
-          onClose();
-          setFormData({
-            name: '',
-            phone: '',
-            city: 'Lahore',
-            systemSize: '5 kW System',
-            message: '',
-          });
-        }, 2500);
-      } else {
-        setErrorMessage(data.message || 'Failed to send inquiry. Please try again.');
-      }
-    } catch (err) {
-      // Fallback response for offline / dev server
-      console.warn('Backend API connection warning:', err);
+    if (res.success) {
       setSubmitSuccess(true);
+      showToast('Quotation Inquiry submitted successfully!', 'success');
       setTimeout(() => {
         setSubmitSuccess(false);
         onClose();
+        setFormData({
+          name: '',
+          phone: '',
+          city: 'Lahore',
+          systemSize: '5 kW System',
+          message: '',
+        });
       }, 2500);
-    } finally {
-      setIsSubmitting(false);
+    } else {
+      setErrorMessage(res.message || 'Failed to send inquiry. Please try again.');
+      showToast(res.message || 'Failed to send inquiry', 'error');
     }
+    setIsSubmitting(false);
   };
 
   return (

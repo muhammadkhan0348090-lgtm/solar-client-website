@@ -230,6 +230,8 @@ export default function App() {
         setActiveTab={setActiveTab}
         onOpenSettings={() => setShowSettingsModal(true)}
         onOpenCreateModal={() => setShowCreateModal(true)}
+        onOpenVisualSearch={() => setShowVisualSearch(true)}
+        onOpenPakistanRates={() => setShowPakistanRatesModal(true)}
       />
 
       {/* Mobile Navigation Drawer */}
@@ -240,6 +242,7 @@ export default function App() {
         setActiveTab={setActiveTab}
         onOpenSettings={() => setShowSettingsModal(true)}
         onOpenCreateModal={() => setShowCreateModal(true)}
+        onOpenVisualSearch={() => setShowVisualSearch(true)}
         onOpenPakistanRates={() => setShowPakistanRatesModal(true)}
         onOpenQuotationModal={() => setShowQuotationModal(true)}
         onOpenAdminDashboard={() => setShowAdminDashboard(true)}
