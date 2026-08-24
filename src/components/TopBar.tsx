@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, Camera, Mic, ChevronDown, Check, Sun, Sparkles, X, Tag, Phone, Mail, FileText, User, ShieldCheck, LogOut, Package, Menu, ArrowRight, Zap, Calculator, Layers, Award } from 'lucide-react';
+import { Search, Camera, Mic, ChevronDown, Check, Sun, Sparkles, X, Tag, Phone, Mail, FileText, User, ShieldCheck, LogOut, Package, Menu, ArrowRight, Zap, Calculator, Layers, Award, Palette } from 'lucide-react';
 import { generateQuotationPDF } from '../utils/pdfGenerator';
+import { ThemeToggle } from './ThemeToggle';
 
 export interface SearchSuggestionItem {
   id: string;
@@ -259,6 +260,9 @@ export const TopBar: React.FC<TopBarProps> = ({
 
       {/* Quick Actions & Auth Controls */}
       <div className="flex items-center gap-1.5 sm:gap-2.5">
+        {/* Dynamic Multi-Theme Switcher */}
+        <ThemeToggle />
+
         {/* PDF Download Button */}
         <button
           onClick={() =>
